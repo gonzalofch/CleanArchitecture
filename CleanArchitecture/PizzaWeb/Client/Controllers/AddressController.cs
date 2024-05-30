@@ -76,7 +76,7 @@ namespace PizzaWeb.Client.Controllers
             //addressDto.City = addressesList[0].City;
             //addressDto.Region = addressesList[0].Region;
 
-            return Ok(addressesList.Select(address => _mapper.Map<AddressDto>(address)));
+            return Ok(addressesList.Select(address => _mapper.Map<Address>(address)));
         }
 
     }

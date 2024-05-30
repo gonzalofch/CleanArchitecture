@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.Otro
 {
-    internal class EditarOtro
+    internal class CrearOtro
     {
     }
 }

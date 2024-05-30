@@ -7,7 +7,7 @@ namespace PizzaWeb.Client
     {
         public AutoMapperProfile()
         {
-            CreateMap<Address, AddressDto>();
+            CreateMap<Address, Address>();
         }
     }
 }

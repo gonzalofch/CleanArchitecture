@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzaWeb.Shared.Models
 {
-    public class AddressDto
+    public class Address
     {
         public string Name { get; set; } = string.Empty;
 
