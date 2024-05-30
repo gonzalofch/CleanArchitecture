@@ -22,7 +22,7 @@ public class OrderController : ControllerBase
     [HttpGet]
     public List<OrderDTO> GetOrders()
     {
-        return _unitOfWork.Orders.GetAll().ToList()
+        return _unitOfWork.Orders.GetAll().ToList(). //stream( ) es como usar linq para seleccionar los campos
             ;
         //return OrderService.getAllOrders();
     }
