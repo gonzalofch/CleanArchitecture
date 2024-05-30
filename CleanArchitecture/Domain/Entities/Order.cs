@@ -1,25 +1,10 @@
-﻿namespace DataAccessBlazor;
+﻿namespace Domain.Entities;
 
 
 public class Order
 {
 
-    public Order(/*int? orderId = 1, string? userId = "11", DateTime? createdTime = null, Address? address = null*/)
-    {
-        //OrderId = orderId ?? 1;
-        //UserId = userId ?? "11";
-        //CreatedTime = createdTime ?? DateTime.Now;
-        //DeliveryAddress = address ?? new Address
-        //{
-        //    Id = 1,
-        //    Name = "Casa",
-        //    Line1 = "123 Calle Principal",
-        //    Line2 = "Piso 2",
-        //    City = "Ciudad",
-        //    Region = "Región",
-        //    PostalCode = "12345"
-        //};
-    }
+    public Order() { }
 
     public int OrderId { get; set; }
 

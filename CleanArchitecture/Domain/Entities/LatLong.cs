@@ -1,4 +1,4 @@
-﻿namespace DataAccessBlazor;
+﻿namespace Domain.Entities;
 
 public class LatLong
 {

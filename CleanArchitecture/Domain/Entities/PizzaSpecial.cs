@@ -1,4 +1,4 @@
-﻿namespace DataAccessBlazor;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Represents a pre-configured template for a pizza a user can order

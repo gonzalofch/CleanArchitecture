@@ -1,4 +1,4 @@
-﻿namespace DataAccessBlazor;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Represents a customized pizza as part of an order
