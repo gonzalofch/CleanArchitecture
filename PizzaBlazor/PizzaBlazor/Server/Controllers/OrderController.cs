@@ -156,10 +156,12 @@ public class OrderController : ControllerBase
     }
 
     // DELETE api/<ValuesController>
-    [HttpDelete("{id}")]
-    public void Delete(OrderDTO order)
+    [HttpDelete("{guid}")]
+    //public void Delete(OrderDTO order)
+    public void Delete(Guid guid)
     {
-        var orderId = _unitOfWork.Orders.Find(_ => _.OrderId == order.OrderId).First();
+        var orderId = _unitOfWork.Orders.Find(_ => _.OrderId == guid).First();
         _unitOfWork.Orders.Remove(orderId);
+        _unitOfWork.Complete();
     }
 }

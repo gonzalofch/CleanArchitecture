@@ -16,7 +16,6 @@ public class Pizza
     }
     public Pizza()
     {
-
     }
 
     public const int DefaultSize = 12;
