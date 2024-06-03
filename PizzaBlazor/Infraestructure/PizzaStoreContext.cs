@@ -18,6 +18,7 @@ namespace Infraestructure
         public DbSet<PizzaSpecial> PizzaSpecials { get; set; }
         public DbSet<Topping> Toppings { get; set; }
         public DbSet<PizzaTopping> PizzaToppings { get; set; }
+        public DbSet<UserInfo> UserInfo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,8 +33,17 @@ namespace Infraestructure
             // Configurar la relación entre Topping y PizzaTopping
             modelBuilder.Entity<PizzaTopping>()
                                 .HasOne(pst => pst.Topping)
-                                .WithMany() 
+                                .WithMany()
                                 .HasForeignKey(pst => pst.ToppingId);
+
+            modelBuilder.Entity<UserInfo>(usr =>
+            {
+                usr.HasKey(u => u.UserId);
+                usr.HasIndex(u => u.Email)
+                    .IsUnique();
+                usr.HasIndex(u => u.UserName)
+                    .IsUnique();
+            });
         }
     }
 }

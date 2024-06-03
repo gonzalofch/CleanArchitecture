@@ -13,10 +13,7 @@ public class Order
         Pizzas = pizzas;
     }
 
-    public Order()
-    {
-
-    }
+    public Order() { }
 
     public Guid OrderId { get; set; }
 

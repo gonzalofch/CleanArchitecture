@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\AddressEditorForm.razor" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.17" />
@@ -14,6 +18,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\PizzaBlazor.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\AddressEditorForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\AddressEditorForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Forms\AddressEditorForm.razor" />
   </ItemGroup>
 
 </Project>

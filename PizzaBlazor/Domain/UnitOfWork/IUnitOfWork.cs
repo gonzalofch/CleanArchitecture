@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     IPizzaToppingRepository PizzaToppings { get; }
     IPizzaSpecialRepository PizzaSpecials{ get; }
     IToppingRepository Toppings { get; }
+    IUserRepository User { get; }
 
     int Complete();
 

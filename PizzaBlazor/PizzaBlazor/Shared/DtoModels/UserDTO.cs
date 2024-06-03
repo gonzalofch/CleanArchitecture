@@ -1,25 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace PizzaBlazor.Shared.DtoModels
 {
-    public class UserInfo
+    public class UserDTO
     {
-        public UserInfo() {}
-
-        public UserInfo(Guid userId, string fullName, string email, string password, string userName,string phoneNumber, bool isAuthenticated)
+        public UserDTO(Guid userId, string fullName, string email, string password, string userName, string phoneNumber, bool isAuthenticated)
         {
-            IsAuthenticated = isAuthenticated;
+            UserId = userId;
             FullName = fullName;
             Email = email;
             Password = password;
-            UserId = userId;
             UserName = userName;
             PhoneNumber = phoneNumber;
-        }
-
-        public UserInfo(Guid userId, string fullName, string email, string password, string userName, string phoneNumber)
-            : this(userId, fullName, email, password, userName, phoneNumber, false)
-        {
+            IsAuthenticated = isAuthenticated;
         }
 
         public Guid UserId { get; set; }
@@ -43,6 +41,5 @@ namespace Domain.Entities
         [Required, RegularExpression(@"^\+?[1-9]\d{1,14}$", ErrorMessage = "Please use a valid Phone Number. It can include a country code and up to 15 digits.")]
         public string PhoneNumber { get; set; }
         public bool IsAuthenticated { get; set; }
-
     }
 }

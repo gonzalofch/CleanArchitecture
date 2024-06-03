@@ -34,8 +34,7 @@ namespace Infraestructure.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            var a = _context.Set<T>().ToList();
-            return a;
+            return _context.Set<T>().ToList();
         }
 
         public T GetByGuid(Guid guid)

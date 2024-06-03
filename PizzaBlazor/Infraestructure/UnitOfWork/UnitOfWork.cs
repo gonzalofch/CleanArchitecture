@@ -21,19 +21,16 @@ public class UnitOfWork : IUnitOfWork
         PizzaToppings = new PizzaToppingRepository(_context);
         PizzaSpecials = new PizzaSpecialRepository(_context);
         Toppings = new ToppingRepository(_context);
+        User = new UserRepository(_context);
     }
 
     public IAddressRepository Adresses { get; private set; }
-
     public IOrderRepository Orders { get; private set; }
-
     public IPizzaRepository Pizzas { get; private set; }
-
     public IPizzaToppingRepository PizzaToppings { get; private set; }
-
     public IPizzaSpecialRepository PizzaSpecials { get; private set; }
-
     public IToppingRepository Toppings { get; private set; }
+    public IUserRepository User { get; private set; }
 
     public int Complete()
     {
