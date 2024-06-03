@@ -34,12 +34,13 @@ namespace Infraestructure.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            var a = _context.Set<T>().ToList();
+            return a;
         }
 
-        public T GetById(int id)
+        public T GetByGuid(Guid guid)
         {
-            return _context.Set<T>().Find(id);
+            return _context.Set<T>().Find(guid);
         }
 
         public void Remove(T entity)

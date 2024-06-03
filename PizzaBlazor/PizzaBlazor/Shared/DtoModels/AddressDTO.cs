@@ -6,17 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzaWeb.Shared.Models
 {
-    public record AddressDTO(string name, string line1, string line2, string city, string region)
+    public record AddressDTO(Guid Id, string Name, string Line1, string Line2, string City, string Region, string PostalCode)
     {
-        public string Name { get; set; } = string.Empty;
-
-        public string Line1 { get; set; } = string.Empty;
-        
-        public string Line2 { get; set; } = string.Empty;
-
-        public string City { get; set; } = string.Empty;
-
-        public string Region { get; set; } = string.Empty;
-
     }
 }

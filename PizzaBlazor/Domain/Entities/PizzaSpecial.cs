@@ -5,15 +5,26 @@
 /// </summary>
 public class PizzaSpecial
 {
-    public int Id { get; set; }
+    public PizzaSpecial(Guid id, string name, decimal basePrice, string description, string imageUrl, int? fixedSize)
+    {
+        Id = id;
+        Name = name;
+        BasePrice = basePrice;
+        Description = description;
+        ImageUrl = imageUrl;
+        FixedSize = fixedSize;
+    }
+    public PizzaSpecial() { }
 
-    public string Name { get; set; }
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
 
     public decimal BasePrice { get; set; }
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty; 
 
-    public string ImageUrl { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
 
     public  int? FixedSize { get; set; }
 

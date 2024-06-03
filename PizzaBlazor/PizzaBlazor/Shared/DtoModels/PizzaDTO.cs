@@ -6,18 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzaWeb.Shared.Models
 {
-    public record  PizzaDTO (Guid id, Guid orderId,PizzaSpecialDTO special,Guid specialId, int size, List<PizzaToppingDTO> toppings)
+    public record  PizzaDTO (Guid Id, Guid OrderId, PizzaSpecialDTO Special, Guid SpecialId, int Size, List<PizzaToppingDTO> Toppings)
     {
-        public int Id { get; set; }
-
-        public int OrderId { get; set; }
-
-        public PizzaSpecialDTO Special { get; set; }
-
-        public int SpecialId { get; set; }
-
-        public int Size { get; set; }
-
-        public List<PizzaToppingDTO> Toppings { get; set; }
     }
 }

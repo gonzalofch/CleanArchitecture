@@ -11,7 +11,7 @@ public class LatLong
         Latitude = latitude;
         Longitude = longitude;
     }
-    public int Id { get; set; } //ID 
+    public Guid Id { get; set; } //ID 
 
     public double Latitude { get; set; }
 

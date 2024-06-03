@@ -5,29 +5,45 @@ using Infraestructure.Repositories;
 using Infraestructure.UnitOfWork;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using PizzaBlazor.Server.Controllers;
-var builder = WebApplication.CreateBuilder(args);
 
+var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+            .Build();
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<PizzaStoreContext>(options =>
-    options.UseSqlServer(connectionString));
-// Agrega el servicio OrderService
-//builder.Services.AddScoped<IOrderService, OrderService>();
-var app = builder.Build();
+    options.UseLazyLoadingProxies().
+    UseSqlServer(connectionString));
+
+builder.Services.AddEndpointsApiExplorer();
+
+
 #region LLamada a los repositorios
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
-builder.Services.AddTransient<IToppingRepository,ToppingRepository>();
-builder.Services.AddTransient<IPizzaToppingRepository,PizzaToppingRepository>();
+builder.Services.AddTransient<IToppingRepository, ToppingRepository>();
+builder.Services.AddTransient<IPizzaToppingRepository, PizzaToppingRepository>();
 builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 builder.Services.AddTransient<IPizzaSpecialRepository, PizzaSpecialRepository>();
 #endregion
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+});
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -40,6 +56,13 @@ else
     app.UseHsts();
 }
 
+//swagger para pruebas
+app.UseSwagger();
+app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    options.RoutePrefix = "swagger";  //swagger/index.html  
+});
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

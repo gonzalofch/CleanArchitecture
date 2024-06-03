@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Infraestructure.Interfaces;
-using Domain.Entities;
 using Infraestructure.Repositories;
+using Domain.Entities;
 
 namespace Infraestructure.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
@@ -40,6 +39,7 @@ public class UnitOfWork : IUnitOfWork
     {
         return _context.SaveChanges();
     }
+
     public void Dispose()
     {
         _context.Dispose();
