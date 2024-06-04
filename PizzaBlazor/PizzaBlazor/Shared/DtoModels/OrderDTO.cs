@@ -10,10 +10,10 @@ namespace PizzaBlazor.Shared.DtoModels
 {
     public class OrderDTO
     {
-        public OrderDTO(Guid orderId, Guid userId, DateTime createdTime, Address deliveryAddress, List<Pizza> pizzas)
+        public OrderDTO(Guid orderId,/* Guid userId,*/ DateTime createdTime, AddressDTO deliveryAddress, List<PizzaDTO> pizzas)
         {
             OrderId = orderId;
-            UserId = userId;
+            //UserId = userId;
             CreatedTime = createdTime;
             DeliveryAddress = deliveryAddress;
             Pizzas = pizzas;
@@ -23,12 +23,12 @@ namespace PizzaBlazor.Shared.DtoModels
 
         public Guid OrderId { get; set; }
 
-        public Guid UserId { get; set; }
+        //public Guid UserId { get; set; }
 
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
 
-        public Address DeliveryAddress { get; set; }
-        public List<Pizza> Pizzas { get; set; }
+        public AddressDTO DeliveryAddress { get; set; }
+        public List<PizzaDTO> Pizzas { get; set; }
 
         public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
 

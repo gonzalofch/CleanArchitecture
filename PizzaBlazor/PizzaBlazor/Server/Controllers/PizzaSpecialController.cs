@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels;
 
 namespace PizzaBlazor.Server.Controllers;
-[Route("api/[controller]")]
+
+[Route("pizzaspecials")]
 [ApiController]
 public class PizzaSpecialController : ControllerBase
 {
@@ -15,17 +16,18 @@ public class PizzaSpecialController : ControllerBase
     }
 
     [HttpGet]
-    public List<Pizza> GetPizzas()
+    public IActionResult GetSpecials()
     {
-        return _unitOfWork.Pizzas.GetAll().ToList();
-        //return OrderService.getAllOrders();
+        var specials = _unitOfWork.PizzaSpecials.GetAll().ToList();
+        return Ok(specials);
     }
 
     // GET api/<ValuesController>/5
     [HttpGet("{id}")]
-    public string Get(int id)
+    public IActionResult GetSpecial(Guid guid)
     {
-        return "value";
+        var special = _unitOfWork.PizzaSpecials.GetByGuid(guid);
+        return Ok(special);
     }
 
     [HttpPost]
@@ -33,14 +35,14 @@ public class PizzaSpecialController : ControllerBase
     {
         var newPizza = new PizzaSpecial(pizza.Id, pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
         _unitOfWork.PizzaSpecials.Add(newPizza);
-        return Ok();
+        return Ok(newPizza);
     }
 
     // DELETE api/<ValuesController>/5
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid guid)
     {
-        var removedPizza = _unitOfWork.PizzaSpecials.Find(p => p.Id== guid).First();
+        var removedPizza = _unitOfWork.PizzaSpecials.Find(p => p.Id == guid).First();
         _unitOfWork.PizzaSpecials.Remove(removedPizza);
         return Ok(removedPizza);
     }

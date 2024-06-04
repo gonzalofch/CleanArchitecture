@@ -30,6 +30,15 @@
 
   <ItemGroup>
     <None Include="Components\Forms\AddressEditorForm.razor" />
+    <None Include="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+    <None Include="wwwroot\css\font\quicksand-v8-latin-300.woff2" />
+    <None Include="wwwroot\css\font\quicksand-v8-latin-500.woff2" />
+    <None Include="wwwroot\css\font\quicksand-v8-latin-700.woff2" />
+    <None Include="wwwroot\css\font\quicksand-v8-latin-regular.woff2" />
+    <None Include="wwwroot\img\bike.svg" />
+    <None Include="wwwroot\img\logo.svg" />
+    <None Include="wwwroot\img\pizza-slice.svg" />
+    <None Include="wwwroot\img\user.svg" />
   </ItemGroup>
 
 </Project>

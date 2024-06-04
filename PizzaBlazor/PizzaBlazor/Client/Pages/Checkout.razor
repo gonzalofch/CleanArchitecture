@@ -1,0 +1,94 @@
+﻿@page "/checkout";
+@using PizzaBlazor.Client;
+@using PizzaBlazor.Client.Components;
+@using PizzaBlazor.Client.Services;
+@using PizzaBlazor.Client.Components.Forms;
+@using PizzaBlazor.Shared.DtoModels;
+@implements IDisposable
+
+@inject OrderState OrderState
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<div class="main">
+    <EditForm EditContext=editContext OnValidSubmit=AddOrder>
+
+        <div class="checkout-cols">
+            <div class="checkout-order-details">
+                <h4>Review order</h4>
+                <OrderReview Order="Order" />
+            </div>
+
+            <div class="checkout-delivery-address">
+                <h4>Deliver to...</h4>
+                @if (isError)
+                {
+                    <div class="alert alert-danger">Please enter a name and address & postal code .</div>
+                }
+                <AddressEditorForm Address="Order.DeliveryAddress" />
+            </div>
+        </div>
+        @* <button class="checkout-button btn btn-warning" disabled=@isSubmitting> *@
+        @* <button class="checkout-button btn btn-warning" @onclick="AddOrder" disabled=@isSubmitting> *@
+        <button class="checkout-button btn btn-warning" type="Submit" disabled=@isError>
+            Place order
+        </button>
+        <DataAnnotationsValidator />
+    </EditForm>
+</div>
+
+@code {
+    private EditContext editContext;
+
+    protected void ShowError()
+    {
+        isError = true;
+    }
+
+    OrderDTO Order => OrderState.Order;
+
+    bool isSubmitting;
+    bool isError = true;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(Order.DeliveryAddress);
+        editContext.OnFieldChanged += HandleFieldChanged;
+    }
+
+    private void HandleFieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        isError = !editContext.Validate();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        editContext.OnFieldChanged -= HandleFieldChanged;
+    }
+    private async Task CheckSubmission(EditContext editContext)
+    {
+        isSubmitting = true;
+        var model = editContext.Model as AddressDTO;
+        isError = string.IsNullOrWhiteSpace(model?.Name)
+            || string.IsNullOrWhiteSpace(model?.Line1)
+            || string.IsNullOrWhiteSpace(model?.PostalCode);
+        if (!isError)
+        {
+            await AddOrder();
+        }
+        isSubmitting = false;
+    }
+
+    async Task AddOrder()
+    {
+        OrderState.Order.DeliveryAddress.Id = Guid.NewGuid();
+        var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
+        var newOrderId = await response.Content.ReadFromJsonAsync<Guid>();
+        OrderState.ResetOrder();
+        NavigationManager.NavigateTo($"myorders/{newOrderId}");
+    }
+
+
+
+}

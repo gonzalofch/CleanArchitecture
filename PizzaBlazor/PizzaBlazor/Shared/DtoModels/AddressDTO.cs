@@ -19,7 +19,7 @@ namespace PizzaBlazor.Shared.DtoModels
             Region = region;
             PostalCode = postalCode;
         }
-
+        public AddressDTO() { }
         public Guid Id { get; set; }
 
         [Required, MinLength(3, ErrorMessage = "Please use a Name bigger than 3 letters."), MaxLength(100, ErrorMessage = "Please use a Name less than 100 letters.")]

@@ -10,7 +10,7 @@ namespace PizzaBlazor.Shared.DtoModels
 {
     public class PizzaDTO
     {
-        public PizzaDTO(Guid id, Guid orderId, Order order, PizzaSpecialDTO special, Guid specialId, int size, List<PizzaToppingDTO> toppings)
+        public PizzaDTO(Guid id, Guid orderId, PizzaSpecialDTO special, Guid specialId, int size, List<PizzaToppingDTO> toppings)
         {
             Id = id;
             OrderId = orderId;
@@ -20,6 +20,7 @@ namespace PizzaBlazor.Shared.DtoModels
             Toppings = toppings;
         }
         public PizzaDTO() { }
+
         public const int DefaultSize = 12;
         public const int MinimumSize = 9;
         public const int MaximumSize = 17;

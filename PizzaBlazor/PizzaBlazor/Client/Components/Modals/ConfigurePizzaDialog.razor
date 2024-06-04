@@ -1,4 +1,4 @@
-﻿@inject HttpClient HttpClient
+﻿
 @using PizzaBlazor.Shared.DtoModels;
 
 <div class="dialog-container">
@@ -12,7 +12,7 @@
                 @if (supportSizing)
                 {
                     <label>Size:</label>
-                    <input type="range" min="@Pizza.MinimumSize" max="@Pizza.MaximumSize"
+                    <input type="range" min="@PizzaDTO.MinimumSize" max="@PizzaDTO.MaximumSize"
                            step="1" @bind="Pizza.Size" @bind:event="oninput" />
                 }
             </div>
@@ -41,5 +41,6 @@
             Pizza.Size = Pizza.Special.FixedSize.Value;
             supportSizing = false;
         }
+
     }
 }
