@@ -8,6 +8,7 @@ public class Topping
         Name = name;
         Price = price;
     }
+
     public Topping() { }
 
     public Guid Id { get; set; }

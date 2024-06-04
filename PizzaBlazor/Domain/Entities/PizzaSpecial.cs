@@ -14,11 +14,11 @@ public class PizzaSpecial
         ImageUrl = imageUrl;
         FixedSize = fixedSize;
     }
-    static PizzaSpecial OneSize(parametrosssss)
+    static PizzaSpecial OneSize(Guid id, string name, decimal basePrice, string description, string imageUrl)
     {
-        return new PizzaSpecial();
-        //me quede aqui haciendo esto, falta pasarle los parametros 
+        return new PizzaSpecial(id, name, basePrice, description, imageUrl,null);
     }
+
     public PizzaSpecial() { }
 
     public Guid Id { get; set; }

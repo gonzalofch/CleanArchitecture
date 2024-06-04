@@ -5,7 +5,7 @@
 /// </summary>
 public class Pizza
 {
-    public Pizza(Guid id, Guid orderId, PizzaSpecial special, Guid specialId, int size, List<PizzaTopping> toppings)
+    public Pizza(Guid id, Guid orderId, PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
     {
         Id = id;
         Special = special;
