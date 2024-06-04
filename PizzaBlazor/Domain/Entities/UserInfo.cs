@@ -4,9 +4,9 @@ namespace Domain.Entities
 {
     public class UserInfo
     {
-        public UserInfo() {}
+        public UserInfo() { }
 
-        public UserInfo(Guid userId, string fullName, string email, string password, string userName,string phoneNumber, bool isAuthenticated)
+        public UserInfo(Guid userId, string fullName, string email, string password, string userName, string phoneNumber, bool isAuthenticated)
         {
             IsAuthenticated = isAuthenticated;
             FullName = fullName;
@@ -17,9 +17,19 @@ namespace Domain.Entities
             PhoneNumber = phoneNumber;
         }
 
-        public UserInfo(Guid userId, string fullName, string email, string password, string userName, string phoneNumber)
-            : this(userId, fullName, email, password, userName, phoneNumber, false)
+        static UserInfo NoAuthenticated(Guid userId, string fullname, string email, string password, string userName, string phoneNumber)
         {
+            return new UserInfo(userId, fullname, email, password, userName, phoneNumber, false);
+        }
+
+        static UserInfo NoPhoneNumber(Guid userId, string fullname, string email, string password, string userName, bool isAuthenticated)
+        {
+            return new UserInfo(userId, fullname, email, password, userName, "", isAuthenticated);
+        }
+
+        static UserInfo GuestMode(string fullname, string phoneNumber)
+        {
+            return new UserInfo(Guid.NewGuid(), fullname, null, null, fullname, phoneNumber, false);
         }
 
         public Guid UserId { get; set; }

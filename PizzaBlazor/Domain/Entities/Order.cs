@@ -7,7 +7,6 @@ public class Order
     public Order(Guid orderId, /*Guid userId,*/ DateTime createdTime, Address deliveryAddress, List<Pizza> pizzas)
     {
         OrderId = orderId;
-        //UserId = userId;
         CreatedTime = createdTime;
         DeliveryAddress = deliveryAddress;
         Pizzas = pizzas;
@@ -16,8 +15,6 @@ public class Order
     public Order() { }
 
     public Guid OrderId { get; set; }
-
-    //public Guid UserId { get; set; }
 
     public DateTime CreatedTime { get; set; }
 
