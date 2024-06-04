@@ -50,12 +50,11 @@
 </div>
 
 @code {
-    List<OrderWithStatusDTO> ordersWithStatus = new List<OrderWithStatusDTO>();
+    List<OrderWithStatusDTO> ordersWithStatus;
 
     protected override async Task OnParametersSetAsync()
     {
         ordersWithStatus = await HttpClient.GetFromJsonAsync<List<OrderWithStatusDTO>>(
-                $"{NavigationManager.BaseUri}status");
+                $"{NavigationManager.BaseUri}orders/status");
     }
-
 }

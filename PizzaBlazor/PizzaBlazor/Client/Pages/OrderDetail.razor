@@ -62,8 +62,8 @@
     {
         try
         {
-            orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>(
-                $"{NavigationManager.BaseUri}status/{OrderId}");
+            Console.WriteLine(orderWithStatus.Order.OrderId);
+            orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
         }
         catch (Exception ex)
         {
@@ -75,7 +75,6 @@
     protected override async Task OnInitializedAsync()
     {
         // QUE ME FUNCIONE ESTO Y GG
-        Console.WriteLine(orderWithStatus.Order.OrderId);
-        var ows = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>($"{NavigationManager.BaseUri}status/{OrderId}");
+        orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
     }
 }

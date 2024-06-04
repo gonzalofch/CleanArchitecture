@@ -62,6 +62,71 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
+    [HttpPost]
+    public IActionResult Post(OrderDTO order)
+    {
+        Order orderEntity = new Order(
+            order.OrderId,
+            //order.UserId,
+            order.CreatedTime,
+            new Address(
+                order.DeliveryAddress.Id,
+                order.DeliveryAddress.Name,
+                order.DeliveryAddress.Line1,
+                order.DeliveryAddress.Line2,
+                order.DeliveryAddress.City,
+                order.DeliveryAddress.Region,
+                order.DeliveryAddress.PostalCode
+            ),
+            order.Pizzas.Select(p =>
+            {
+                var pizzaSpecial = _unitOfWork.PizzaSpecials.GetByGuid(p.Special.Id);
+                if (pizzaSpecial == null)
+                {
+                    pizzaSpecial = new PizzaSpecial(
+                        p.Special.Id,
+                        p.Special.Name,
+                        p.Special.BasePrice,
+                        p.Special.Description,
+                        p.Special.ImageUrl,
+                        p.Special.FixedSize
+                    );
+                }
+
+                return new Pizza(
+                    p.Id,
+                    p.OrderId,
+                    pizzaSpecial,
+                    p.SpecialId,
+                    p.Size,
+                    p.Toppings.Select(t =>
+                    {
+                        var topping = _unitOfWork.Toppings.GetByGuid(t.Topping.Id);
+                        if (topping == null)
+                        {
+                            topping = new Topping(
+                                t.Topping.Id,
+                                t.Topping.Name,
+                                t.Topping.Price
+                            );
+                        }
+
+                        return new PizzaTopping(
+                            topping,
+                            t.ToppingId,
+                            t.PizzaId
+                        );
+                    }).ToList()
+                );
+            }).ToList()
+        );
+
+        _unitOfWork.Orders.Add(orderEntity);
+        _unitOfWork.Complete();
+
+        return Ok(orderEntity.OrderId);
+    }
+
     [HttpGet("details/{guid}")]
     public OrderDTO GetOrder(Guid guid)
     {
@@ -104,6 +169,7 @@ public class OrderController : ControllerBase
         )).ToList()
     );
     }
+
     [HttpGet("status")]
     public IActionResult GetOrdersWithStatus()
     {
@@ -198,71 +264,6 @@ public class OrderController : ControllerBase
         }
 
         return Ok(OrderWithStatusDTO.FromOrder(orderDto));
-    }
-
-    [HttpPost]
-    public IActionResult Post(OrderDTO order)
-    {
-        Order orderEntity = new Order(
-            order.OrderId,
-            //order.UserId,
-            order.CreatedTime,
-            new Address(
-                order.DeliveryAddress.Id,
-                order.DeliveryAddress.Name,
-                order.DeliveryAddress.Line1,
-                order.DeliveryAddress.Line2,
-                order.DeliveryAddress.City,
-                order.DeliveryAddress.Region,
-                order.DeliveryAddress.PostalCode
-            ),
-            order.Pizzas.Select(p =>
-            {
-                var pizzaSpecial = _unitOfWork.PizzaSpecials.GetByGuid(p.Special.Id);
-                if (pizzaSpecial == null)
-                {
-                    pizzaSpecial = new PizzaSpecial(
-                        p.Special.Id,
-                        p.Special.Name,
-                        p.Special.BasePrice,
-                        p.Special.Description,
-                        p.Special.ImageUrl,
-                        p.Special.FixedSize
-                    );
-                }
-
-                return new Pizza(
-                    p.Id,
-                    p.OrderId,
-                    pizzaSpecial,
-                    p.SpecialId,
-                    p.Size,
-                    p.Toppings.Select(t =>
-                    {
-                        var topping = _unitOfWork.Toppings.GetByGuid(t.Topping.Id);
-                        if (topping == null)
-                        {
-                            topping = new Topping(
-                                t.Topping.Id,
-                                t.Topping.Name,
-                                t.Topping.Price
-                            );
-                        }
-
-                        return new PizzaTopping(
-                            topping,
-                            t.ToppingId,
-                            t.PizzaId
-                        );
-                    }).ToList()
-                );
-            }).ToList()
-        );
-
-        _unitOfWork.Orders.Add(orderEntity);
-        _unitOfWork.Complete();
-
-        return Ok(orderEntity.OrderId);
     }
 
     [HttpDelete("{guid}")]
