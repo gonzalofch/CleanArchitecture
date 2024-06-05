@@ -19,11 +19,10 @@ public class OrderState
         ConfiguringPizza = new PizzaDTO()
         {
             Id=Guid.NewGuid(),
-            OrderId= Guid.NewGuid(),
             Special = special,
             SpecialId = special.Id,
             Size = PizzaDTO.DefaultSize,
-            Toppings = new List<PizzaToppingDTO>(),
+            Toppings = new List<ToppingDTO>(),
         };
 
         ShowingConfigureDialog = true;
@@ -51,5 +50,5 @@ public class OrderState
     public void ResetOrder()
     {
         Order = new OrderDTO();
-    }
+    } 
 }

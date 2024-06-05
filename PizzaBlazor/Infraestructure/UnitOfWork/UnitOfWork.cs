@@ -18,7 +18,6 @@ public class UnitOfWork : IUnitOfWork
         Adresses = new AddressRepository(_context);
         Orders = new OrderRepository(_context);
         Pizzas = new PizzaRepository(_context);
-        PizzaToppings = new PizzaToppingRepository(_context);
         PizzaSpecials = new PizzaSpecialRepository(_context);
         Toppings = new ToppingRepository(_context);
         User = new UserRepository(_context);
@@ -27,7 +26,6 @@ public class UnitOfWork : IUnitOfWork
     public IAddressRepository Adresses { get; private set; }
     public IOrderRepository Orders { get; private set; }
     public IPizzaRepository Pizzas { get; private set; }
-    public IPizzaToppingRepository PizzaToppings { get; private set; }
     public IPizzaSpecialRepository PizzaSpecials { get; private set; }
     public IToppingRepository Toppings { get; private set; }
     public IUserRepository User { get; private set; }

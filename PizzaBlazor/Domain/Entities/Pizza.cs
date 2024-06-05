@@ -1,11 +1,13 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Entities;
 
 /// <summary>
 /// Represents a customized pizza as part of an order
 /// </summary>
 public class Pizza
 {
-    public Pizza(Guid id, Guid orderId, PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
+    public Pizza(Guid id, PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
     {
         Id = id;
         Special = special;
@@ -22,7 +24,7 @@ public class Pizza
     public const int MaximumSize = 17;
 
     public Guid Id { get; set; }
-
+    
     public virtual PizzaSpecial Special { get; set; }
 
     public Guid SpecialId { get; set; }

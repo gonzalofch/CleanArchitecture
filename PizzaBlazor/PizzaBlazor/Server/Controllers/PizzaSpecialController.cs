@@ -35,6 +35,7 @@ public class PizzaSpecialController : ControllerBase
     {
         var newPizza = new PizzaSpecial(pizza.Id, pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
         _unitOfWork.PizzaSpecials.Add(newPizza);
+        _unitOfWork.Complete();
         return Ok(newPizza);
     }
 

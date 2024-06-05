@@ -32,7 +32,6 @@ builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericReposi
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
 builder.Services.AddTransient<IToppingRepository, ToppingRepository>();
-builder.Services.AddTransient<IPizzaToppingRepository, PizzaToppingRepository>();
 builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 builder.Services.AddTransient<IPizzaSpecialRepository, PizzaSpecialRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();

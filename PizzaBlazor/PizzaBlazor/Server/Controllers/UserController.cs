@@ -51,7 +51,8 @@ namespace PizzaBlazor.Server.Controllers
         [HttpPost]
         public IActionResult AddUser(UserDTO user)
         {
-            UserInfo newUser = new UserInfo(user.UserId, user.FullName, user.Email, user.Password, user.UserName, user.PhoneNumber);
+            
+            UserInfo newUser = UserInfo.NoAuthenticated(user.UserId, user.FullName, user.Email, user.Password, user.UserName, user.PhoneNumber);
             _unitOfWork.User.Add(newUser);
             _unitOfWork.Complete();
             return Ok(newUser);

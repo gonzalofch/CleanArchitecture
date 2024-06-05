@@ -4,6 +4,7 @@ using Infraestructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(PizzaStoreContext))]
-    partial class PizzaStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240605071104_CambioRelaciones2")]
+    partial class CambioRelaciones2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,27 +145,17 @@ namespace Infraestructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("PizzaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PizzaId");
+
                     b.ToTable("Toppings");
-                });
-
-            modelBuilder.Entity("PizzaTopping", b =>
-                {
-                    b.Property<Guid>("PizzaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToppingsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("PizzaId", "ToppingsId");
-
-                    b.HasIndex("ToppingsId");
-
-                    b.ToTable("PizzaTopping");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -191,17 +184,11 @@ namespace Infraestructure.Migrations
                     b.Navigation("Special");
                 });
 
-            modelBuilder.Entity("PizzaTopping", b =>
+            modelBuilder.Entity("Domain.Entities.Topping", b =>
                 {
                     b.HasOne("Domain.Entities.Pizza", null)
-                        .WithMany()
+                        .WithMany("Toppings")
                         .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Topping", null)
-                        .WithMany()
-                        .HasForeignKey("ToppingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -209,6 +196,11 @@ namespace Infraestructure.Migrations
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Navigation("Pizzas");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Pizza", b =>
+                {
+                    b.Navigation("Toppings");
                 });
 #pragma warning restore 612, 618
         }

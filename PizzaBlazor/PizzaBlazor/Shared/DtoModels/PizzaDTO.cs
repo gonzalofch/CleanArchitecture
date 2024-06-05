@@ -10,10 +10,9 @@ namespace PizzaBlazor.Shared.DtoModels
 {
     public class PizzaDTO
     {
-        public PizzaDTO(Guid id, Guid orderId, PizzaSpecialDTO special, Guid specialId, int size, List<PizzaToppingDTO> toppings)
+        public PizzaDTO(Guid id, PizzaSpecialDTO special, Guid specialId, int size, List<ToppingDTO> toppings)
         {
             Id = id;
-            OrderId = orderId;
             Special = special;
             SpecialId = specialId;
             Size = size;
@@ -26,7 +25,6 @@ namespace PizzaBlazor.Shared.DtoModels
         public const int MaximumSize = 17;
         public Guid Id { get; set; }
 
-        public Guid OrderId { get; set; }
 
         public PizzaSpecialDTO Special { get; set; }
 
@@ -34,7 +32,7 @@ namespace PizzaBlazor.Shared.DtoModels
 
         public int Size { get; set; }
 
-        public List<PizzaToppingDTO> Toppings { get; set; }
+        public List<ToppingDTO> Toppings { get; set; }
 
         public decimal GetBasePrice() =>
         Special is { FixedSize: not null }

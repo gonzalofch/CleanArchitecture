@@ -14,6 +14,7 @@ public class PizzaSpecial
         ImageUrl = imageUrl;
         FixedSize = fixedSize;
     }
+
     static PizzaSpecial OneSize(Guid id, string name, decimal basePrice, string description, string imageUrl)
     {
         return new PizzaSpecial(id, name, basePrice, description, imageUrl,null);

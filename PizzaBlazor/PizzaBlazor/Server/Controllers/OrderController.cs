@@ -2,6 +2,7 @@
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,7 +37,6 @@ public class OrderController : ControllerBase
         ),
         _.Pizzas.Select(p => new PizzaDTO(
             p.Id,
-            p.OrderId,
             new PizzaSpecialDTO(
                 p.Special.Id,
                 p.Special.Name,
@@ -47,14 +47,10 @@ public class OrderController : ControllerBase
             ),
             p.SpecialId,
             p.Size,
-            p.Toppings.Select(t => new PizzaToppingDTO(
-                new ToppingDTO(
-                    t.Topping.Id,
-                    t.Topping.Name,
-                    t.Topping.Price
-                ),
-                t.ToppingId,
-                t.PizzaId
+            p.Toppings.Select(t => new ToppingDTO(
+                    t.Id,
+                    t.Name,
+                    t.Price
             )).ToList()
         )).ToList()
     )).ToList();
@@ -65,9 +61,10 @@ public class OrderController : ControllerBase
     [HttpPost]
     public IActionResult Post(OrderDTO order)
     {
+        PizzaSpecialDTO pizzaSpecialDTO;
+
         Order orderEntity = new Order(
             order.OrderId,
-            //order.UserId,
             order.CreatedTime,
             new Address(
                 order.DeliveryAddress.Id,
@@ -81,6 +78,7 @@ public class OrderController : ControllerBase
             order.Pizzas.Select(p =>
             {
                 var pizzaSpecial = _unitOfWork.PizzaSpecials.GetByGuid(p.Special.Id);
+
                 if (pizzaSpecial == null)
                 {
                     pizzaSpecial = new PizzaSpecial(
@@ -92,32 +90,18 @@ public class OrderController : ControllerBase
                         p.Special.FixedSize
                     );
                 }
+                var toppings = _unitOfWork.Toppings.GetByGuid(p.Id);
 
                 return new Pizza(
                     p.Id,
-                    p.OrderId,
                     pizzaSpecial,
                     p.SpecialId,
                     p.Size,
-                    p.Toppings.Select(t =>
-                    {
-                        var topping = _unitOfWork.Toppings.GetByGuid(t.Topping.Id);
-                        if (topping == null)
-                        {
-                            topping = new Topping(
-                                t.Topping.Id,
-                                t.Topping.Name,
-                                t.Topping.Price
-                            );
-                        }
-
-                        return new PizzaTopping(
-                            topping,
-                            t.ToppingId,
-                            t.PizzaId
-                        );
-                    }).ToList()
-                );
+                    p.Toppings.Select(t => new Topping(
+                    t.Id,
+                    t.Name,
+                    t.Price
+            )).ToList());
             }).ToList()
         );
 
@@ -146,7 +130,6 @@ public class OrderController : ControllerBase
         ),
         order.Pizzas.Select(p => new PizzaDTO(
             p.Id,
-            p.OrderId,
             new PizzaSpecialDTO(
                 p.Special.Id,
                 p.Special.Name,
@@ -157,15 +140,11 @@ public class OrderController : ControllerBase
             ),
             p.SpecialId,
             p.Size,
-            p.Toppings.Select(t => new PizzaToppingDTO(
-                new ToppingDTO(
-                    t.Topping.Id,
-                    t.Topping.Name,
-                    t.Topping.Price
-                ),
-                t.ToppingId,
-                t.PizzaId
-            )).ToList()
+            p.Toppings.Select(t => new ToppingDTO(
+                    t.Id,
+                    t.Name,
+                    t.Price
+                    )).ToList()
         )).ToList()
     );
     }
@@ -189,7 +168,6 @@ public class OrderController : ControllerBase
         ),
         o.Pizzas.Select(p => new PizzaDTO(
             p.Id,
-            p.OrderId,
             new PizzaSpecialDTO(
                 p.Special.Id,
                 p.Special.Name,
@@ -200,14 +178,10 @@ public class OrderController : ControllerBase
             ),
             p.SpecialId,
             p.Size,
-            p.Toppings.Select(t => new PizzaToppingDTO(
-                new ToppingDTO(
-                    t.Topping.Id,
-                    t.Topping.Name,
-                    t.Topping.Price
-                ),
-                t.ToppingId,
-                t.PizzaId
+            p.Toppings.Select(t => new ToppingDTO(
+                    t.Id,
+                    t.Name,
+                    t.Price
             )).ToList()
         )).ToList()));
 
@@ -236,7 +210,6 @@ public class OrderController : ControllerBase
         ),
         order.Pizzas.Select(p => new PizzaDTO(
             p.Id,
-            p.OrderId,
             new PizzaSpecialDTO(
                 p.Special.Id,
                 p.Special.Name,
@@ -247,14 +220,10 @@ public class OrderController : ControllerBase
             ),
             p.SpecialId,
             p.Size,
-            p.Toppings.Select(t => new PizzaToppingDTO(
-                new ToppingDTO(
-                    t.Topping.Id,
-                    t.Topping.Name,
-                    t.Topping.Price
-                ),
-                t.ToppingId,
-                t.PizzaId
+            p.Toppings.Select(t => new ToppingDTO(
+                    t.Id,
+                    t.Name,
+                    t.Price
             )).ToList()
         )).ToList());
 

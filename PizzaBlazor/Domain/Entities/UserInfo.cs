@@ -17,17 +17,17 @@ namespace Domain.Entities
             PhoneNumber = phoneNumber;
         }
 
-        static UserInfo NoAuthenticated(Guid userId, string fullname, string email, string password, string userName, string phoneNumber)
+        public static UserInfo NoAuthenticated(Guid userId, string fullname, string email, string password, string userName, string phoneNumber)
         {
             return new UserInfo(userId, fullname, email, password, userName, phoneNumber, false);
         }
 
-        static UserInfo NoPhoneNumber(Guid userId, string fullname, string email, string password, string userName, bool isAuthenticated)
+        public static UserInfo NoPhoneNumber(Guid userId, string fullname, string email, string password, string userName, bool isAuthenticated)
         {
             return new UserInfo(userId, fullname, email, password, userName, "", isAuthenticated);
         }
 
-        static UserInfo GuestMode(string fullname, string phoneNumber)
+        public static UserInfo GuestMode(string fullname, string phoneNumber)
         {
             return new UserInfo(Guid.NewGuid(), fullname, null, null, fullname, phoneNumber, false);
         }
