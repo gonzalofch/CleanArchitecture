@@ -1,5 +1,4 @@
-﻿
-@using PizzaBlazor.Shared.DtoModels;
+﻿@using PizzaBlazor.Shared.DtoModels;
 
 <div class="dialog-container">
     <div class="dialog">
@@ -16,6 +15,45 @@
                            step="1" @bind="Pizza.Size" @bind:event="oninput" />
                 }
             </div>
+            <div>
+                <label>Extra Toppings:</label>
+                @if (AvailableToppings is null)
+                {
+                    <select class="custom-select" disabled>
+                        <option>(loading...)</option>
+                    </select>
+                }
+                else if (Pizza.Toppings.Count >= 6)
+                {
+                    <div>(maximum reached)</div>
+                }
+                else
+                {
+                    <select class="custom-select" @onchange="ToppingSelected">
+                        <option value="-1" disabled selected>(select)</option>
+                        @for (var i = 0; i < AvailableToppings.Count; i++)
+                        {
+                            <option value="@i">@AvailableToppings[i].Name - (£@(AvailableToppings[i].GetFormattedPrice()))</option>
+                        }
+                    </select>
+                }
+            </div>
+
+            <div class="toppings">
+                @foreach (var topping in Pizza.Toppings)
+                {
+                    if (topping is not null)
+                    {
+                        <div class="topping">
+                            @topping.Name
+                            <span class="topping-price">@topping.GetFormattedPrice()</span>
+                            <button type="button" class="delete-topping" @onclick="@(() =>  Pizza.Toppings.Remove(topping))">
+                                x
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
         </form>
 
         <div class="dialog-buttons">
@@ -30,12 +68,38 @@
 
 @code {
     [Parameter] public PizzaDTO Pizza { get; set; }
+    [Parameter] public EventCallback OnSelectTopping { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public List<ToppingDTO> AvailableToppings { get; set; }
+
     bool supportSizing = true;
+
+    void ToppingSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse((string?)e.Value, out var index) && index >= 0)
+        {
+            AddTopping(AvailableToppings[index]);
+        }
+    }
+    public void Remove(ToppingDTO topping)
+    {
+        Pizza.Toppings.RemoveAll(tpn => tpn == topping);
+    }
+
+    public void AddTopping(ToppingDTO topping)
+    {
+        if (Pizza.Toppings is null)
+            return;
+        if (Pizza.Toppings.Find(tpn => tpn.Id == topping.Id) is null)
+        {
+            Pizza.Toppings.Add(topping);
+        }
+    }
 
     protected override void OnInitialized()
     {
+
         if (Pizza is { Special.FixedSize: not null })
         {
             Pizza.Size = Pizza.Special.FixedSize.Value;

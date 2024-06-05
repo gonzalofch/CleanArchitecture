@@ -6,7 +6,7 @@
 
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
-@inject OrderState OrderState
+@inject OrderState OrderStateInstance
 
 
 @page "/pizzas"
@@ -21,7 +21,7 @@
             {
                 Console.WriteLine(special);
 
-                <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
+                <li @onclick="@(() => OrderStateInstance.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@special.Name</span>
                         @special.Description
@@ -30,11 +30,12 @@
                 </li>
             }
 
-            @if (OrderState.ShowingConfigureDialog)
+            @if (OrderStateInstance.ShowingConfigureDialog)
             {
-                <ConfigurePizzaDialog Pizza="OrderState.ConfiguringPizza"
-                                      OnCancel="OrderState.CancelConfigurePizzaDialog"
-                                      OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
+                <ConfigurePizzaDialog Pizza="OrderStateInstance.ConfiguringPizza"
+                                      AvailableToppings="selectableToppings"
+                                      OnCancel="OrderStateInstance.CancelConfigurePizzaDialog"
+                                      OnConfirm="OrderStateInstance.ConfirmConfigurePizzaDialog" />
             }
         }
     </ul>
@@ -46,7 +47,7 @@
     <div class="order-contents">
         <h2>Your order</h2>
 
-        @foreach (var configuredPizza in OrderState.Order.Pizzas)
+        @foreach (var configuredPizza in OrderStateInstance.Order.Pizzas)
         {
             Console.WriteLine("llega");
             <div class="cart-item">
@@ -56,7 +57,7 @@
                 <div class="item-price">
                     @configuredPizza.GetFormattedTotalPrice()
                 </div>
-                <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
+                <a @onclick="@(() => OrderStateInstance.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
             </div>
         }
     </div>
@@ -79,8 +80,8 @@
 
 @code {
     List<PizzaSpecialDTO> specials;
-
-    OrderDTO order => OrderState.Order;
+    List<ToppingDTO> selectableToppings;
+    OrderDTO order => OrderStateInstance.Order;
 
     /*
     * With NavigationManager we can obtain all these values
@@ -102,6 +103,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        selectableToppings = await HttpClient.GetFromJsonAsync<List<ToppingDTO>>(NavigationManager.BaseUri + "toppings");
         specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecialDTO>>(NavigationManager.BaseUri + "pizzaspecials");
     }
 }

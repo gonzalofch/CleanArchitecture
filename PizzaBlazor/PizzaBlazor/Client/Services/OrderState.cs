@@ -1,4 +1,5 @@
-﻿using Domain.UnitOfWork;
+﻿using Domain.Entities;
+using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Components;
 using PizzaBlazor.Shared.DtoModels;
 
@@ -7,18 +8,19 @@ public class OrderState
 {
     public bool ShowingConfigureDialog { get; private set; }
     public PizzaDTO ConfiguringPizza { get; private set; }
-    public OrderDTO Order { get; private set; } = 
-        new OrderDTO(Guid.NewGuid(),/*Guid.NewGuid(),*/DateTime.Now,new AddressDTO(),new List<PizzaDTO>());
+    public List<ToppingDTO> SelectedToppings { get; private set; } = new List<ToppingDTO>();
+    public OrderDTO Order { get; private set; } =
+        new OrderDTO(Guid.NewGuid(),/*Guid.NewGuid(),*/DateTime.Now, new AddressDTO(), new List<PizzaDTO>());
     public OrderState()
     {
-        
+
     }
 
     public void ShowConfigurePizzaDialog(PizzaSpecialDTO special)
     {
         ConfiguringPizza = new PizzaDTO()
         {
-            Id=Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Special = special,
             SpecialId = special.Id,
             Size = PizzaDTO.DefaultSize,
@@ -50,5 +52,17 @@ public class OrderState
     public void ResetOrder()
     {
         Order = new OrderDTO();
-    } 
+    }
+
+    //TOPPINGS
+    public void InitializeToppings(List<ToppingDTO> toppings)
+    {
+        SelectedToppings = toppings;
+    }
+
+    
+
+ 
+
+    
 }

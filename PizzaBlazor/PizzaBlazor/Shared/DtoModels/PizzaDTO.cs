@@ -25,7 +25,6 @@ namespace PizzaBlazor.Shared.DtoModels
         public const int MaximumSize = 17;
         public Guid Id { get; set; }
 
-
         public PizzaSpecialDTO Special { get; set; }
 
         public Guid SpecialId { get; set; }
@@ -41,7 +40,14 @@ namespace PizzaBlazor.Shared.DtoModels
 
         public decimal GetTotalPrice()
         {
-            return GetBasePrice();
+            var toppingsPrice = 0.0m;
+
+            foreach (var topping in Toppings)
+            {
+                toppingsPrice += topping.Price;
+            }
+
+            return GetBasePrice() + toppingsPrice;
         }
 
         public string GetFormattedTotalPrice()

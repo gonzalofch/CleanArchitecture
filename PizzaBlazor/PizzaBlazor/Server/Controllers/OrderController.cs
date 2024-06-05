@@ -61,49 +61,49 @@ public class OrderController : ControllerBase
     [HttpPost]
     public IActionResult Post(OrderDTO order)
     {
-        PizzaSpecialDTO pizzaSpecialDTO;
+        //orderdto a order
+        List<Topping> allToppings = _unitOfWork.Toppings.GetAll().ToList();
+        List<PizzaSpecial> allPizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToList();
 
-        Order orderEntity = new Order(
-            order.OrderId,
-            order.CreatedTime,
-            new Address(
-                order.DeliveryAddress.Id,
-                order.DeliveryAddress.Name,
-                order.DeliveryAddress.Line1,
-                order.DeliveryAddress.Line2,
-                order.DeliveryAddress.City,
-                order.DeliveryAddress.Region,
-                order.DeliveryAddress.PostalCode
-            ),
-            order.Pizzas.Select(p =>
+        Order orderEntity = new Order
+        {
+            OrderId = order.OrderId,
+            CreatedTime = order.CreatedTime,
+            DeliveryAddress = new Address
             {
-                var pizzaSpecial = _unitOfWork.PizzaSpecials.GetByGuid(p.Special.Id);
-
-                if (pizzaSpecial == null)
+                Id = order.DeliveryAddress.Id,
+                Name = order.DeliveryAddress.Name,
+                Line1 = order.DeliveryAddress.Line1,
+                Line2 = order.DeliveryAddress.Line2,
+                City = order.DeliveryAddress.City,
+                Region = order.DeliveryAddress.Region,
+                PostalCode = order.DeliveryAddress.PostalCode
+            },
+            Pizzas = order.Pizzas.Select(p =>
+            {
+                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.Special.Id) ?? new PizzaSpecial
                 {
-                    pizzaSpecial = new PizzaSpecial(
-                        p.Special.Id,
-                        p.Special.Name,
-                        p.Special.BasePrice,
-                        p.Special.Description,
-                        p.Special.ImageUrl,
-                        p.Special.FixedSize
-                    );
-                }
-                var toppings = _unitOfWork.Toppings.GetByGuid(p.Id);
+                    Id = p.Special.Id,
+                    Name = p.Special.Name,
+                    BasePrice = p.Special.BasePrice,
+                    Description = p.Special.Description,
+                    ImageUrl = p.Special.ImageUrl,
+                    FixedSize = p.Special.FixedSize
+                };
 
-                return new Pizza(
-                    p.Id,
-                    pizzaSpecial,
-                    p.SpecialId,
-                    p.Size,
-                    p.Toppings.Select(t => new Topping(
-                    t.Id,
-                    t.Name,
-                    t.Price
-            )).ToList());
+                return new Pizza
+                {
+                    Id = p.Id,
+                    SpecialId = p.SpecialId,
+                    Special = pizzaSpecial,
+                    Size = p.Size,
+                    Toppings = p.Toppings.Select(tp =>
+                    {
+                        return allToppings.FirstOrDefault(t => t.Id == tp.Id);
+                    }).ToList()
+                };
             }).ToList()
-        );
+        };
 
         _unitOfWork.Orders.Add(orderEntity);
         _unitOfWork.Complete();

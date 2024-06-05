@@ -40,7 +40,14 @@ public class Pizza
 
     public decimal GetTotalPrice()
     {
-        return GetBasePrice();
+        var toppingsPrice = 0.0m;
+
+        foreach (var topping in Toppings)
+        {
+            toppingsPrice+= topping.Price;
+        }
+
+        return GetBasePrice() + toppingsPrice;
     }
 
     public string GetFormattedTotalPrice()
