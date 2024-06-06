@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
+﻿using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
 using PizzaBlazor.Shared.DtoModels.Topping;
 using System;
 using System.Collections.Generic;

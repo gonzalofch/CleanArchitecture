@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using PizzaBlazor.Shared.DtoModels.Order;
+﻿using PizzaBlazor.Shared.DtoModels.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;

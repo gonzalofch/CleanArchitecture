@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-using Domain.UnitOfWork;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using PizzaBlazor.Shared.DtoModels;
 using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Order;

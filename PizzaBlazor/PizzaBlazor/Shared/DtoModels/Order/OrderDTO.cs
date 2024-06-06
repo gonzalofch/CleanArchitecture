@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using PizzaBlazor.Shared.DtoModels.Address;
+﻿using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Pizza;
 using System;
 using System.Collections.Generic;
