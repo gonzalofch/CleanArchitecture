@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.UseCases;
+using Domain.Entities;
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels;
@@ -10,25 +11,23 @@ namespace PizzaBlazor.Server.Controllers
     [ApiController]
     public class ToppingController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public ToppingController(IUnitOfWork unitOfWork)
+        private readonly ToppingService _toppingService;
+        public ToppingController(ToppingService toppingService)
         {
-            _unitOfWork = unitOfWork;
+            _toppingService = toppingService;
         }
 
         [HttpGet]
         public IActionResult GetToppings()
         {
-            var toppings = _unitOfWork.Toppings.GetAll().ToList();
+            var toppings =_toppingService.GetToppings();
             return Ok(toppings);
         }
 
         [HttpPost]
-        public IActionResult AddToppings(ToppingDTO toppingDTO)
+        public IActionResult AddToppings(ToppingCreateInfo topping)
         {
-            Topping topping = new Topping(toppingDTO.Id, toppingDTO.Name, toppingDTO.Price);
-            _unitOfWork.Toppings.Add(topping);
-            _unitOfWork.Complete();
+            _toppingService.AddTopping(topping);
             return Ok(topping);
         }
     }

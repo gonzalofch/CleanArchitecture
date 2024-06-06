@@ -13,6 +13,4 @@ public class OrderWithStatusController : ControllerBase
     {
         _unitOfWork = unitOfWork;
     }
-
-    
 }

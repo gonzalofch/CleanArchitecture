@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Infraestructure\Infraestructure.csproj" />
     <ProjectReference Include="..\Client\PizzaBlazor.Client.csproj" />
     <ProjectReference Include="..\Shared\PizzaBlazor.Shared.csproj" />

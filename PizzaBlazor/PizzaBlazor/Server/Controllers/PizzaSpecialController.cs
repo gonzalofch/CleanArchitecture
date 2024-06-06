@@ -1,50 +1,51 @@
-﻿using Domain.Entities;
+﻿using Application.UseCases;
+using Domain.Entities;
 using Domain.UnitOfWork;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
-
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 namespace PizzaBlazor.Server.Controllers;
 
 [Route("pizzaspecials")]
 [ApiController]
 public class PizzaSpecialController : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public PizzaSpecialController(IUnitOfWork unitOfWork)
+
+    private readonly PizzaService _pizzaService;
+    public PizzaSpecialController(PizzaService pizzaService)
     {
-        _unitOfWork = unitOfWork;
+        _pizzaService = pizzaService;
     }
 
     [HttpGet]
     public IActionResult GetSpecials()
     {
-        var specials = _unitOfWork.PizzaSpecials.GetAll().ToList();
+        var specials = _pizzaService.GetPizzaSpecials();
         return Ok(specials);
     }
 
-    // GET api/<ValuesController>/5
-    [HttpGet("{id}")]
-    public IActionResult GetSpecial(Guid guid)
-    {
-        var special = _unitOfWork.PizzaSpecials.GetByGuid(guid);
-        return Ok(special);
-    }
+    //// GET api/<ValuesController>/5
+    //[HttpGet("{id}")]
+    //public IActionResult GetSpecial(Guid guid)
+    //{
+    //    var special = _unitOfWork.PizzaSpecials.GetByGuid(guid);
+    //    return Ok(special);
+    //}
 
     [HttpPost]
-    public IActionResult AddNewPizza(PizzaSpecialDTO pizza)
+    public IActionResult AddNewPizza(PizzaSpecialCreateInfo pizza)
     {
-        var newPizza = new PizzaSpecial(pizza.Id, pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
-        _unitOfWork.PizzaSpecials.Add(newPizza);
-        _unitOfWork.Complete();
-        return Ok(newPizza);
+        _pizzaService.AddPizzaSpecial(pizza);
+        return Ok(pizza);
     }
 
     // DELETE api/<ValuesController>/5
-    [HttpDelete("{id}")]
-    public IActionResult Delete(Guid guid)
-    {
-        var removedPizza = _unitOfWork.PizzaSpecials.Find(p => p.Id == guid).First();
-        _unitOfWork.PizzaSpecials.Remove(removedPizza);
-        return Ok(removedPizza);
-    }
+    //[HttpDelete("{id}")]
+    //public IActionResult Delete(Guid guid)
+    //{
+    //    var removedPizza = _unitOfWork.PizzaSpecials.Find(p => p.Id == guid).First();
+    //    _unitOfWork.PizzaSpecials.Remove(removedPizza);
+    //    return Ok(removedPizza);
+    //}
 }

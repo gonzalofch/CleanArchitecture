@@ -1,3 +1,4 @@
+using Application.UseCases;
 using Domain.Repositories;
 using Domain.UnitOfWork;
 using Infraestructure;
@@ -38,7 +39,9 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 #endregion
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<PizzaService>();
+builder.Services.AddScoped<ToppingService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
