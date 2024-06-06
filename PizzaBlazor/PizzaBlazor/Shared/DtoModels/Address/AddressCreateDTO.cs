@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaBlazor.Shared.DtoModels
+namespace PizzaBlazor.Shared.DtoModels.Address
 {
-    public class AddressDTO
+    public class AddressCreateDTO
     {
-        public AddressDTO(Guid id, string name, string line1, string line2, string city, string region, string postalCode)
+        public AddressCreateDTO(string name, string line1, string line2, string city, string region, string postalCode)
         {
-            Id = id;
             Name = name;
             Line1 = line1;
             Line2 = line2;
@@ -19,8 +18,7 @@ namespace PizzaBlazor.Shared.DtoModels
             Region = region;
             PostalCode = postalCode;
         }
-        public AddressDTO() { }
-        public Guid Id { get; set; }
+        public AddressCreateDTO() { }
 
         [Required, MinLength(3, ErrorMessage = "Please use a Name bigger than 3 letters."), MaxLength(100, ErrorMessage = "Please use a Name less than 100 letters.")]
         public string Name { get; set; }

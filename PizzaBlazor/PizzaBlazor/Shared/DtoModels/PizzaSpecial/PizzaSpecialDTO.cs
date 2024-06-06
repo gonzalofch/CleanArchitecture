@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaBlazor.Shared.DtoModels
+namespace PizzaBlazor.Shared.DtoModels.PizzaSpecial
 {
     public class PizzaSpecialDTO
     {

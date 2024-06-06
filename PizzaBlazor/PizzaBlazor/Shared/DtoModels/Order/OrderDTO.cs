@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using PizzaBlazor.Shared.DtoModels.Address;
+using PizzaBlazor.Shared.DtoModels.Pizza;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaBlazor.Shared.DtoModels
+namespace PizzaBlazor.Shared.DtoModels.Order
 {
     public class OrderDTO
     {
@@ -28,6 +30,7 @@ namespace PizzaBlazor.Shared.DtoModels
         public DateTime CreatedTime { get; set; } = DateTime.Now;
 
         public AddressDTO DeliveryAddress { get; set; }
+
         public List<PizzaDTO> Pizzas { get; set; }
 
         public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());

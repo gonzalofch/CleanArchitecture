@@ -3,6 +3,7 @@
 @using PizzaBlazor.Client.Services;
 @using System.Text;
 @using PizzaBlazor.Shared.DtoModels;
+@using PizzaBlazor.Shared.DtoModels.Order;
 
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
@@ -11,6 +12,8 @@
 
 @page "/pizzas"
 @page "/"
+@using PizzaBlazor.Shared.DtoModels.Order
+@using PizzaBlazor.Shared.DtoModels.PizzaSpecial
 @*Pruebas de Navigation Manager con lo que devuelven*@
 
 <div class="main">

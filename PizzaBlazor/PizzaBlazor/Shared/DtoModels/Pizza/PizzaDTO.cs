@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
+using PizzaBlazor.Shared.DtoModels.Topping;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaBlazor.Shared.DtoModels
+namespace PizzaBlazor.Shared.DtoModels.Pizza
 {
     public class PizzaDTO
     {
@@ -56,5 +58,5 @@ namespace PizzaBlazor.Shared.DtoModels
         }
 
     }
-    
+
 }

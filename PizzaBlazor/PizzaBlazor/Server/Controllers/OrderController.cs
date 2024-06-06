@@ -2,6 +2,10 @@
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels;
+using PizzaBlazor.Shared.DtoModels.Address;
+using PizzaBlazor.Shared.DtoModels.Order;
+using PizzaBlazor.Shared.DtoModels.Pizza;
+using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
 using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -59,19 +63,25 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post(OrderDTO order)
+    public IActionResult Post(OrderCreateDTO order)
     {
         //orderdto a order
+        //Usar los CreateDTOs para pasar solamente los valores necesarios para hacer el pedido y que en el json se envien solamente esos datos
         List<Topping> allToppings = _unitOfWork.Toppings.GetAll().ToList();
         List<PizzaSpecial> allPizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToList();
 
-        Order orderEntity = new Order
+        /*
+        ORDER: 
+        OrderId = Guid.NewGuid(),
+         CreatedTime = order.CreatedTime,
+            ADDRESS:
+            Id = order.DeliveryAddress.Id,
+            
+        */
+        OrderCreateDTO createOrder = new OrderCreateDTO
         {
-            OrderId = order.OrderId,
-            CreatedTime = order.CreatedTime,
-            DeliveryAddress = new Address
+            DeliveryAddress = new AddressCreateDTO
             {
-                Id = order.DeliveryAddress.Id,
                 Name = order.DeliveryAddress.Name,
                 Line1 = order.DeliveryAddress.Line1,
                 Line2 = order.DeliveryAddress.Line2,
@@ -81,25 +91,46 @@ public class OrderController : ControllerBase
             },
             Pizzas = order.Pizzas.Select(p =>
             {
-                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.Special.Id) ?? new PizzaSpecial
-                {
-                    Id = p.Special.Id,
-                    Name = p.Special.Name,
-                    BasePrice = p.Special.BasePrice,
-                    Description = p.Special.Description,
-                    ImageUrl = p.Special.ImageUrl,
-                    FixedSize = p.Special.FixedSize
-                };
+                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.SpecialId) ?? new PizzaSpecial();
 
-                return new Pizza
+                return new PizzaCreateDTO
                 {
-                    Id = p.Id,
-                    SpecialId = p.SpecialId,
-                    Special = pizzaSpecial,
+                    SpecialId = pizzaSpecial.Id,
                     Size = p.Size,
                     Toppings = p.Toppings.Select(tp =>
                     {
-                        return allToppings.FirstOrDefault(t => t.Id == tp.Id);
+                        return tp;
+                    }).ToList()
+                };
+            }).ToList()
+        };
+
+        Order orderEntity = new Order()
+        {
+            OrderId = Guid.NewGuid(),
+            CreatedTime = DateTime.Now,
+            DeliveryAddress = new Address()
+            {
+                Id = Guid.NewGuid(),
+                City = createOrder.DeliveryAddress.City,
+                Region = createOrder.DeliveryAddress.Region,
+                Line1 = createOrder.DeliveryAddress.Line1,
+                Line2 = createOrder.DeliveryAddress.Line2,
+                Name = createOrder.DeliveryAddress.Name,
+                PostalCode = createOrder.DeliveryAddress.PostalCode
+            },
+            Pizzas = createOrder.Pizzas.Select(p =>
+            {
+                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.SpecialId) ?? new PizzaSpecial();
+                return new Pizza
+                {
+                    Id = Guid.NewGuid(),
+                    SpecialId = pizzaSpecial.Id,
+                    Size = p.Size,
+                    Special = pizzaSpecial,
+                    Toppings = p.Toppings.Select(tpng =>
+                    {
+                        return allToppings.FirstOrDefault(t => t.Id == tpng);
                     }).ToList()
                 };
             }).ToList()

@@ -2,6 +2,7 @@
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels;
+using PizzaBlazor.Shared.DtoModels.Topping;
 
 namespace PizzaBlazor.Server.Controllers
 {

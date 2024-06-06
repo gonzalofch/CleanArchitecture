@@ -2,6 +2,11 @@
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Components;
 using PizzaBlazor.Shared.DtoModels;
+using PizzaBlazor.Shared.DtoModels.Address;
+using PizzaBlazor.Shared.DtoModels.Order;
+using PizzaBlazor.Shared.DtoModels.Pizza;
+using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
+using PizzaBlazor.Shared.DtoModels.Topping;
 
 namespace PizzaBlazor.Client.Services;
 public class OrderState

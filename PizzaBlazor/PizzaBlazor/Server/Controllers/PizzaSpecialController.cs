@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
-using PizzaBlazor.Shared.DtoModels;
+using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
 
 namespace PizzaBlazor.Server.Controllers;
 
