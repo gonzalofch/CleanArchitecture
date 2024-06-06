@@ -21,8 +21,8 @@ namespace PizzaBlazor.Shared.DtoModels.Order
 
         //public Guid UserId { get; set; }
 
-        public AddressCreateDTO DeliveryAddress { get; set; }
+        public AddressCreateDTO DeliveryAddress { get; set; } = new AddressCreateDTO();
 
-        public List<PizzaCreateDTO> Pizzas { get; set; }
+        public List<PizzaCreateDTO> Pizzas { get; set; } = new List<PizzaCreateDTO>();
     }
 }

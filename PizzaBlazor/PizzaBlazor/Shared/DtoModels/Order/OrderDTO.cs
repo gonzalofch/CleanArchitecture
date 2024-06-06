@@ -29,9 +29,9 @@ namespace PizzaBlazor.Shared.DtoModels.Order
 
         public DateTime CreatedTime { get; set; } = DateTime.Now;
 
-        public AddressDTO DeliveryAddress { get; set; }
+        public AddressDTO DeliveryAddress { get; set; } = new AddressDTO();
 
-        public List<PizzaDTO> Pizzas { get; set; }
+        public List<PizzaDTO> Pizzas { get; set; } = new List<PizzaDTO>();
 
         public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
 

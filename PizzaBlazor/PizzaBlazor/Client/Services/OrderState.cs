@@ -13,9 +13,11 @@ public class OrderState
 {
     public bool ShowingConfigureDialog { get; private set; }
     public PizzaDTO ConfiguringPizza { get; private set; }
-    public List<ToppingDTO> SelectedToppings { get; private set; } = new List<ToppingDTO>();
+    public List<ToppingDTO> SelectedToppings { get; private set; }
     public OrderDTO Order { get; private set; } =
         new OrderDTO(Guid.NewGuid(),/*Guid.NewGuid(),*/DateTime.Now, new AddressDTO(), new List<PizzaDTO>());
+    public OrderCreateDTO OrderCreation { get; private set; } = new OrderCreateDTO(new AddressCreateDTO(), new List<PizzaCreateDTO>());
+
     public OrderState()
     {
 
@@ -48,15 +50,16 @@ public class OrderState
 
     public void ConfirmConfigurePizzaDialog()
     {
-
+        PizzaCreateDTO pizzaToCreate = new(ConfiguringPizza.SpecialId, ConfiguringPizza.Size, ConfiguringPizza.Toppings.Select(t => t.Id).ToList());
         Order.Pizzas.Add(ConfiguringPizza);
+        OrderCreation.Pizzas.Add(pizzaToCreate);
         ConfiguringPizza = null;
-        ShowingConfigureDialog = false;
-    }
+        ShowingConfigureDialog = false;    }
 
     public void ResetOrder()
     {
         Order = new OrderDTO();
+        OrderCreation = new OrderCreateDTO();
     }
 
     //TOPPINGS
@@ -65,9 +68,9 @@ public class OrderState
         SelectedToppings = toppings;
     }
 
-    
 
- 
 
-    
+
+
+
 }

@@ -1,6 +1,5 @@
 ﻿@using PizzaBlazor.Shared.DtoModels.Pizza
 @using PizzaBlazor.Shared.DtoModels;
-@using PizzaBlazor.Shared.DtoModels.Pizza;
 
 <div class="dialog-container">
     <div class="dialog">
@@ -14,7 +13,7 @@
                 {
                     <label>Size:</label>
                     <input type="range" min="@PizzaDTO.MinimumSize" max="@PizzaDTO.MaximumSize"
-                           step="1" @bind="Pizza.Size" @bind:event="oninput" />
+                           step="1" @bind="Pizza.Size" @bind:event="oninput"  />
                 }
             </div>
             <div>
@@ -74,7 +73,6 @@
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public List<ToppingDTO> AvailableToppings { get; set; }
-
     bool supportSizing = true;
 
     void ToppingSelected(ChangeEventArgs e)
@@ -101,12 +99,10 @@
 
     protected override void OnInitialized()
     {
-
         if (Pizza is { Special.FixedSize: not null })
         {
             Pizza.Size = Pizza.Special.FixedSize.Value;
             supportSizing = false;
         }
-
     }
 }

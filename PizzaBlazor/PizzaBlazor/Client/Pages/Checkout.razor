@@ -27,7 +27,7 @@
                 {
                     <div class="alert alert-danger">Please enter a name and address & postal code .</div>
                 }
-                <AddressEditorForm Address="Order.DeliveryAddress" />
+                <AddressEditorForm Address="Address" />
             </div>
         </div>
         @* <button class="checkout-button btn btn-warning" disabled=@isSubmitting> *@
@@ -48,13 +48,14 @@
     }
 
     OrderDTO Order => OrderState.Order;
+    AddressCreateDTO Address => OrderState.OrderCreation.DeliveryAddress;
 
     bool isSubmitting;
     bool isError = true;
 
     protected override void OnInitialized()
     {
-        editContext = new(Order.DeliveryAddress);
+        editContext = new(Address);
         editContext.OnFieldChanged += HandleFieldChanged;
     }
 
@@ -71,7 +72,7 @@
     private async Task CheckSubmission(EditContext editContext)
     {
         isSubmitting = true;
-        var model = editContext.Model as AddressDTO;
+        var model = editContext.Model as AddressCreateDTO;
         isError = string.IsNullOrWhiteSpace(model?.Name)
             || string.IsNullOrWhiteSpace(model?.Line1)
             || string.IsNullOrWhiteSpace(model?.PostalCode);
@@ -84,8 +85,8 @@
 
     async Task AddOrder()
     {
-        OrderState.Order.DeliveryAddress.Id = Guid.NewGuid();
-        var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
+        //deliveryData
+        var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.OrderCreation);
         var newOrderId = await response.Content.ReadFromJsonAsync<Guid>();
         OrderState.ResetOrder();
         NavigationManager.NavigateTo($"myorders/{newOrderId}");
