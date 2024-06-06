@@ -65,23 +65,17 @@ public class OrderController : ControllerBase
     [HttpPost]
     public IActionResult Post(OrderCreateDTO order)
     {
-        //orderdto a order
-        //Usar los CreateDTOs para pasar solamente los valores necesarios para hacer el pedido y que en el json se envien solamente esos datos
-        List<Topping> allToppings = _unitOfWork.Toppings.GetAll().ToList();
-        List<PizzaSpecial> allPizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToList();
+        var allToppings = _unitOfWork.Toppings.GetAll().ToDictionary(t => t.Id);
+        var allPizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToDictionary(ps => ps.Id);
 
-        /*
-        ORDER: 
-        OrderId = Guid.NewGuid(),
-         CreatedTime = order.CreatedTime,
-            ADDRESS:
-            Id = order.DeliveryAddress.Id,
-            
-        */
-        OrderCreateDTO createOrder = new OrderCreateDTO
+        // OrderCreateDTO a Order
+        var orderEntity = new Order
         {
-            DeliveryAddress = new AddressCreateDTO
+            OrderId = Guid.NewGuid(),
+            CreatedTime = DateTime.Now,
+            DeliveryAddress = new Address
             {
+                Id = Guid.NewGuid(),
                 Name = order.DeliveryAddress.Name,
                 Line1 = order.DeliveryAddress.Line1,
                 Line2 = order.DeliveryAddress.Line2,
@@ -91,47 +85,17 @@ public class OrderController : ControllerBase
             },
             Pizzas = order.Pizzas.Select(p =>
             {
-                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.SpecialId) ?? new PizzaSpecial();
-
-                return new PizzaCreateDTO
-                {
-                    SpecialId = pizzaSpecial.Id,
-                    Size = p.Size,
-                    Toppings = p.Toppings.Select(tp =>
-                    {
-                        return tp;
-                    }).ToList()
-                };
-            }).ToList()
-        };
-
-        Order orderEntity = new Order()
-        {
-            OrderId = Guid.NewGuid(),
-            CreatedTime = DateTime.Now,
-            DeliveryAddress = new Address()
-            {
-                Id = Guid.NewGuid(),
-                City = createOrder.DeliveryAddress.City,
-                Region = createOrder.DeliveryAddress.Region,
-                Line1 = createOrder.DeliveryAddress.Line1,
-                Line2 = createOrder.DeliveryAddress.Line2,
-                Name = createOrder.DeliveryAddress.Name,
-                PostalCode = createOrder.DeliveryAddress.PostalCode
-            },
-            Pizzas = createOrder.Pizzas.Select(p =>
-            {
-                var pizzaSpecial = allPizzaSpecials.FirstOrDefault(e => e.Id == p.SpecialId) ?? new PizzaSpecial();
+                var pizzaSpecial = allPizzaSpecials.GetValueOrDefault(p.SpecialId) ?? new PizzaSpecial();
                 return new Pizza
                 {
                     Id = Guid.NewGuid(),
                     SpecialId = pizzaSpecial.Id,
                     Size = p.Size,
                     Special = pizzaSpecial,
-                    Toppings = p.Toppings.Select(tpng =>
-                    {
-                        return allToppings.FirstOrDefault(t => t.Id == tpng);
-                    }).ToList()
+                    Toppings = p.Toppings
+                               .Where(tpngId => allToppings.ContainsKey(tpngId))
+                               .Select(tpngId => allToppings[tpngId])
+                               .ToList()
                 };
             }).ToList()
         };
@@ -141,6 +105,7 @@ public class OrderController : ControllerBase
 
         return Ok(orderEntity.OrderId);
     }
+
 
     [HttpGet("details/{guid}")]
     public OrderDTO GetOrder(Guid guid)
