@@ -1,5 +1,6 @@
 ﻿@page "/myorders/{orderId:guid}"
 @using PizzaBlazor.Shared.DtoModels
+@using PizzaBlazor.Shared.DtoModels.Order
 
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
@@ -28,7 +29,7 @@
         <div class="track-order">
             <div class="track-order-title">
                 <h2>
-                    Order placed @orderWithStatus.Order.CreatedTime.ToLongDateString()
+                    Order placed @orderWithStatus.CreatedTime.ToLongDateString()
                 </h2>
                 <p class="ml-auto mb-0">
                     Status: <strong>@orderWithStatus.StatusText</strong>
@@ -36,7 +37,7 @@
             </div>
             <div class="track-order-body">
                 <div class="track-order-details">
-                    @foreach (var pizza in orderWithStatus.Order.Pizzas)
+                    @foreach (var pizza in orderWithStatus.Pizzas)
                     {
                         <p>
                             <strong>
@@ -56,15 +57,15 @@
     [Parameter]
     public Guid OrderId { get; set; }
 
-    OrderWithStatusDTO orderWithStatus;
+    OrderDTO orderWithStatus;
     bool invalidOrder = false;
 
     protected override async Task OnParametersSetAsync()
     {
         try
         {
-            Console.WriteLine(orderWithStatus.Order.OrderId);
-            orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
+            Console.WriteLine(orderWithStatus.OrderId);
+            orderWithStatus = await HttpClient.GetFromJsonAsync<OrderDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
         }
         catch (Exception ex)
         {
@@ -76,6 +77,6 @@
     protected override async Task OnInitializedAsync()
     {
         // QUE ME FUNCIONE ESTO Y GG
-        orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatusDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
+        orderWithStatus = await HttpClient.GetFromJsonAsync<OrderDTO>($"{NavigationManager.BaseUri}orders/status/{OrderId}");
     }
 }

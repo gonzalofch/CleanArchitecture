@@ -20,43 +20,28 @@ namespace Application.UseCases
         {
             var allToppings = _unitOfWork.Toppings.GetAll().ToDictionary(t => t.Id);
             var allPizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToDictionary(ps => ps.Id);
-            var orderEntity = new Order
-            {
-                OrderId = Guid.NewGuid(),
-                CreatedTime = DateTime.Now,
-                DeliveryAddress = new Address
-                {
-                    Id = Guid.NewGuid(),
-                    Name = order.DeliveryAddress.Name,
-                    Line1 = order.DeliveryAddress.Line1,
-                    Line2 = order.DeliveryAddress.Line2,
-                    City = order.DeliveryAddress.City,
-                    Region = order.DeliveryAddress.Region,
-                    PostalCode = order.DeliveryAddress.PostalCode
-                },
-                Pizzas = order.Pizzas.Select(p =>
+            var orderEntity = MapperExtension.MapearAOrderDesdeCreateInfo(order);
+
+            orderEntity.Pizzas = order.Pizzas.Select(p =>
                 {
                     var pizzaSpecial = allPizzaSpecials.GetValueOrDefault(p.SpecialId) ?? new PizzaSpecial();
+                    var pizza = MapperExtension.MapearDesdePizzaInfo(p);
                     return new Pizza
                     {
-                        Id = Guid.NewGuid(),
-                        SpecialId = pizzaSpecial.Id,
-                        Size = p.Size,
                         Special = pizzaSpecial,
                         Toppings = p.Toppings
                                    .Where(tpngId => allToppings.ContainsKey(tpngId))
                                    .Select(tpngId => allToppings[tpngId])
                                    .ToList()
                     };
-                }).ToList()
-            };
+                }).ToList();
 
             _unitOfWork.Orders.Add(orderEntity);
             _unitOfWork.Complete();
             return orderEntity.OrderId;
         }
 
-        public OrderWithStatus GetOrderWithStatus(Guid orderId)
+        public Order GetOrderWithStatus(Guid orderId)
         {
             var order = _unitOfWork.Orders
     .Find(o => o.OrderId == orderId).First();
@@ -92,14 +77,13 @@ namespace Application.UseCases
                 )).ToList()
             )).ToList());
 
-            return orderDto.GetStatus();
+            return orderDto;
 
         }
-        public List<OrderWithStatus> GetAllOrdersWithStatus()
+        public List<Order> GetAllOrdersWithStatus()
         {
-            var orders = _unitOfWork.Orders.GetAll();
-            var ordersWithStatus = orders.Select(orderDto => orderDto.GetStatus()).ToList();
-            return ordersWithStatus;
+            var orders = _unitOfWork.Orders.GetAll().ToList();
+            return orders;
         }
     }
 }

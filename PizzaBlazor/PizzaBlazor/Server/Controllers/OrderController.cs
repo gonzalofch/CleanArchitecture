@@ -33,65 +33,92 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("status")]
-    public List<OrderWithStatusDTO> GetOrdersWithStatus()
+    public List<OrderDTO> GetOrdersWithStatus()
     {
         var allOrdersWithStatus = _orderService.GetAllOrdersWithStatus();
         var DtoOrderStatus = allOrdersWithStatus.Select(ows =>
         {
-            return new OrderWithStatusDTO
+
+            return new OrderDTO
             {
-                Order = new OrderDTO
+                OrderId = ows.OrderId,
+                CreatedTime = ows.CreatedTime,
+                DeliveryAddress = new AddressDTO(
+                    ows.DeliveryAddress.Id,
+                    ows.DeliveryAddress.Name,
+                    ows.DeliveryAddress.Line1,
+                    ows.DeliveryAddress.Line2,
+                    ows.DeliveryAddress.City,
+                    ows.DeliveryAddress.Region,
+                    ows.DeliveryAddress.PostalCode
+                ),
+                Pizzas = ows.Pizzas.Select(pz =>
                 {
-                    OrderId = ows.Order.OrderId,
-                    CreatedTime = ows.Order.CreatedTime,
-                    DeliveryAddress = new AddressDTO(
-                        ows.Order.DeliveryAddress.Id,
-                        ows.Order.DeliveryAddress.Name,
-                        ows.Order.DeliveryAddress.Line1,
-                        ows.Order.DeliveryAddress.Line2,
-                        ows.Order.DeliveryAddress.City,
-                        ows.Order.DeliveryAddress.Region,
-                        ows.Order.DeliveryAddress.PostalCode
-                    ),
-                    Pizzas = ows.Order.Pizzas.Select(pz =>
+                    return new PizzaDTO
                     {
-                        return new PizzaDTO
+                        Id = pz.Id,
+                        Size = pz.Size,
+                        Special = new PizzaSpecialDTO(
+                            pz.Special.Id,
+                            pz.Special.Name,
+                            pz.Special.BasePrice,
+                            pz.Special.Description,
+                            pz.Special.ImageUrl,
+                            pz.Special.FixedSize
+                        ),
+                        SpecialId = pz.SpecialId,
+                        Toppings = pz.Toppings.Select(tpp =>
                         {
-                            Id = pz.Id,
-                            Size = pz.Size,
-                            Special = new PizzaSpecialDTO(
-                                pz.Special.Id,
-                                pz.Special.Name,
-                                pz.Special.BasePrice,
-                                pz.Special.Description,
-                                pz.Special.ImageUrl,
-                                pz.Special.FixedSize
-                            ),
-                            SpecialId = pz.SpecialId,
-                            Toppings = pz.Toppings.Select(tpp =>
+                            return new ToppingDTO
                             {
-                                return new ToppingDTO
-                                {
-                                    Name = tpp.Name,
-                                    Id = tpp.Id,
-                                    Price = tpp.Price
-                                };
-                            }).ToList()
-                        };
-                    }).ToList()
-                },
-                StatusText = ows.StatusText
+                                Name = tpp.Name,
+                                Id = tpp.Id,
+                                Price = tpp.Price
+                            };
+                        }).ToList()
+                    };
+                }).ToList(),
+                StatusText = ows.GetStatus()
             };
         }).ToList();
 
         return DtoOrderStatus;
-
     }
 
     [HttpGet("status/{orderId}")]
-    public IActionResult GetOrderWithStatus(Guid orderId)
+    public OrderDTO GetOrderWithStatus(Guid orderId)
     {
         var orderStatus = _orderService.GetOrderWithStatus(orderId);
-        return Ok(orderStatus);
+        var DtoOrderStatus = new OrderDTO
+        {
+            CreatedTime = orderStatus.CreatedTime,
+            DeliveryAddress = new AddressDTO
+            {
+                Name = orderStatus.DeliveryAddress.Name,
+                Id = orderStatus.DeliveryAddress.Id,
+                City = orderStatus.DeliveryAddress.City,
+                Region = orderStatus.DeliveryAddress.Region,
+                Line1 = orderStatus.DeliveryAddress.Line1,
+                Line2 = orderStatus.DeliveryAddress.Line2,
+                PostalCode = orderStatus.DeliveryAddress.PostalCode,
+            },
+            OrderId = orderId,
+            Pizzas = orderStatus.Pizzas.Select(pzz =>
+            {
+                return new PizzaDTO(pzz.Id,
+                    new PizzaSpecialDTO(pzz.Special.Id, pzz.Special.Name, pzz.Special.BasePrice,
+                    pzz.Special.Description,
+                    pzz.Special.ImageUrl,
+                    pzz.Special.FixedSize),
+                    pzz.Id, pzz.Size,
+                    pzz.Toppings.Select(tpp =>
+                    {
+                        return new ToppingDTO(tpp.Id, tpp.Name, tpp.Price);
+                    }).ToList());
+            }).ToList(),
+            StatusText = orderStatus.GetStatus()
+        };
+
+        return DtoOrderStatus;
     }
 }

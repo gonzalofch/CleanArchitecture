@@ -2,30 +2,32 @@
 @using PizzaBlazor.Client.Components;
 @using PizzaBlazor.Client.Components.Pagination;
 @using PizzaBlazor.Shared.DtoModels;
+@using PizzaBlazor.Shared.DtoModels.Order;
+
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
 <div class="main">
-    @if (ordersWithStatus == null)
+    @if (orders == null)
     {
         <text>Loading...</text>
     }
-    else if (!ordersWithStatus.Any())
+    else if (!orders.Any())
     {
         <h2>No orders placed</h2>
         <a class="btn btn-success" href="">Order some pizza</a>
     }
     else
     {
-        <PaginationComponent TItem="OrderWithStatusDTO"
-                             Items="ordersWithStatus.OrderBy(o => o.Order.CreatedTime).ToList()"
-                             ItemLabel='item => new($"{item.Order.CreatedTime:ddd, MMM. d, yyyy}")'>
+        <PaginationComponent TItem="OrderDTO"
+                             Items="orders.OrderBy(o => o.CreatedTime).ToList()"
+                             ItemLabel='item => new($"{item.CreatedTime:ddd, MMM. d, yyyy}")'>
             <ItemContent>
                 <div class="list-group-item bg-secondary text-white">
                     <div class="col">
-                        <h5>@($"{context.Order.CreatedTime:dddd, MMMM d, yyyy hh:mm tt}")</h5>
+                        <h5>@($"{context.CreatedTime:dddd, MMMM d, yyyy hh:mm tt}")</h5>
                         Items:
-                        <strong>@context.Order.Pizzas.Count</strong>
+                        <strong>@context.Pizzas.Count</strong>
                     </div>
                     <div class="col">
                         Status: <strong>@context.StatusText</strong>
@@ -33,7 +35,7 @@
                     @if (@context.StatusText != "Delivered")
                     {
                         <div class="col flex-grow-0">
-                            <a href="myorders/@context.Order.OrderId" class="btn btn-success">
+                            <a href="myorders/@context.OrderId" class="btn btn-success">
                                 Track &gt;
                             </a>
                         </div>
@@ -41,7 +43,7 @@
                 </div>
                 <div class="list-group-item">
                     <div class="col">
-                        <OrderReview Order="@context.Order" />
+                        <OrderReview Order="@context" />
                     </div>
                 </div>
             </ItemContent>
@@ -50,11 +52,11 @@
 </div>
 
 @code {
-    List<OrderWithStatusDTO> ordersWithStatus;
+    List<OrderDTO> orders;
 
     protected override async Task OnParametersSetAsync()
     {
-        ordersWithStatus = await HttpClient.GetFromJsonAsync<List<OrderWithStatusDTO>>(
+        orders = await HttpClient.GetFromJsonAsync<List<OrderDTO>>(
                 $"{NavigationManager.BaseUri}orders/status");
     }
 }

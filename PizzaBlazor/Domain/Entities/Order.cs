@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Domain.StateEnums;
+
+namespace Domain.Entities;
 
 
 public class Order
@@ -23,29 +25,27 @@ public class Order
     public virtual Address DeliveryAddress { get; set; }
 
     public virtual List<Pizza> Pizzas { get; set; }
-
     public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
 
-    public OrderWithStatus GetStatus()
+    public string GetStatus()
     {
         string statusText;
-        DateTime date = DateTime.Now;
-        var dispatchTime = date.Add(PreparationDuration);
+        var dispatchTime = DateTime.Now.Add(PreparationDuration);
 
         if (DateTime.Now < dispatchTime)
         {
-            statusText = "Preparing";
+            statusText = DispatchTimeState.Preparing.Message;
         }
         else if (DateTime.Now < dispatchTime + DeliveryDuration)
         {
-            statusText = "Out for delivery";
+            statusText = DispatchTimeState.OutForDelivery.Message;
         }
         else
         {
-            statusText = "Delivered";
+            statusText = DispatchTimeState.Delivered.Message;
         }
 
-        return new OrderWithStatus(this, statusText);
+        return statusText;
     }
 }
