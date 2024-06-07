@@ -12,8 +12,8 @@ namespace PizzaBlazor.Server.Controllers;
 public class PizzaSpecialController : ControllerBase
 {
 
-    private readonly PizzaService _pizzaService;
-    public PizzaSpecialController(PizzaService pizzaService)
+    private readonly PizzaSpecialService _pizzaService;
+    public PizzaSpecialController(PizzaSpecialService pizzaService)
     {
         _pizzaService = pizzaService;
     }
@@ -25,27 +25,10 @@ public class PizzaSpecialController : ControllerBase
         return Ok(specials);
     }
 
-    //// GET api/<ValuesController>/5
-    //[HttpGet("{id}")]
-    //public IActionResult GetSpecial(Guid guid)
-    //{
-    //    var special = _unitOfWork.PizzaSpecials.GetByGuid(guid);
-    //    return Ok(special);
-    //}
-
     [HttpPost]
     public IActionResult AddNewPizza(PizzaSpecialCreateInfo pizza)
     {
         _pizzaService.AddPizzaSpecial(pizza);
         return Ok(pizza);
     }
-
-    // DELETE api/<ValuesController>/5
-    //[HttpDelete("{id}")]
-    //public IActionResult Delete(Guid guid)
-    //{
-    //    var removedPizza = _unitOfWork.PizzaSpecials.Find(p => p.Id == guid).First();
-    //    _unitOfWork.PizzaSpecials.Remove(removedPizza);
-    //    return Ok(removedPizza);
-    //}
 }

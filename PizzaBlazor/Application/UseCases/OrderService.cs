@@ -97,39 +97,7 @@ namespace Application.UseCases
         }
         public List<OrderWithStatus> GetAllOrdersWithStatus()
         {
-            var orders = _unitOfWork.Orders.GetAll()
-            .Select(o => new Order(
-        o.OrderId,
-        //o.UserId,
-        o.CreatedTime,
-        new Address(
-            o.DeliveryAddress.Id,
-            o.DeliveryAddress.Name,
-            o.DeliveryAddress.Line1,
-            o.DeliveryAddress.Line2,
-            o.DeliveryAddress.City,
-            o.DeliveryAddress.Region,
-            o.DeliveryAddress.PostalCode
-        ),
-        o.Pizzas.Select(p => new Pizza(
-            p.Id,
-            new PizzaSpecial(
-                p.Special.Id,
-                p.Special.Name,
-                p.Special.BasePrice,
-                p.Special.Description,
-                p.Special.ImageUrl,
-                p.Special.FixedSize
-            ),
-            p.SpecialId,
-            p.Size,
-            p.Toppings.Select(t => new Topping(
-                    t.Id,
-                    t.Name,
-                    t.Price
-            )).ToList()
-        )).ToList()));
-
+            var orders = _unitOfWork.Orders.GetAll();
             var ordersWithStatus = orders.Select(orderDto => OrderWithStatus.FromOrder(orderDto)).ToList();
             return ordersWithStatus;
         }

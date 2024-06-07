@@ -39,7 +39,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 #endregion
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<PizzaService>();
+builder.Services.AddScoped<PizzaSpecialService>();
 builder.Services.AddScoped<ToppingService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddSwaggerGen(c =>

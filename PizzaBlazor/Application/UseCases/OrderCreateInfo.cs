@@ -2,7 +2,7 @@
 {
     public class OrderCreateInfo
     {
-        public OrderCreateInfo( AddressCreateInfo deliveryAddress, List<PizzaCreateInfo> pizzas)
+        public OrderCreateInfo(AddressCreateInfo deliveryAddress, List<PizzaCreateInfo> pizzas)
         {
             DeliveryAddress = deliveryAddress;
             Pizzas = pizzas;

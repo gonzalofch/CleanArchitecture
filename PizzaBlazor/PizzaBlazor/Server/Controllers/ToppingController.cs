@@ -23,12 +23,5 @@ namespace PizzaBlazor.Server.Controllers
             var toppings =_toppingService.GetToppings();
             return Ok(toppings);
         }
-
-        [HttpPost]
-        public IActionResult AddToppings(ToppingCreateInfo topping)
-        {
-            _toppingService.AddTopping(topping);
-            return Ok(topping);
-        }
     }
 }

@@ -13,8 +13,6 @@ public class OrderWithStatus
 
     public static OrderWithStatus FromOrder(Order order)
     {
-        // To simulate a real backend process, we fake status updates based on the amount
-        // of time since the order was placed
         string statusText;
         DateTime date=DateTime.Now;
         var dispatchTime =date.Add(PreparationDuration);

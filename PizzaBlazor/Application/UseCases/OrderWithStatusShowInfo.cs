@@ -1,10 +1,9 @@
-﻿using Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Domain.Entities;
 namespace Application.UseCases
 {
     public class OrderWithStatusShowInfo
@@ -46,7 +45,6 @@ namespace Application.UseCases
             }
 
             return new OrderWithStatusShowInfo(order, statusText);
-            
         }
     }
 }

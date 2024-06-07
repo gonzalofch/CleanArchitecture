@@ -4,7 +4,7 @@ namespace Application.UseCases
 {
     public class ToppingCreateInfo
     {
-        public ToppingCreateInfo( string name, decimal price)
+        public ToppingCreateInfo(string name, decimal price)
         {
             Name = name;
             Price = price;

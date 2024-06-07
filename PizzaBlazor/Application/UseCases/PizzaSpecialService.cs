@@ -7,17 +7,17 @@ using Domain.Entities;
 using Domain.UnitOfWork;
 namespace Application.UseCases
 {
-    public class PizzaService
+    public class PizzaSpecialService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public PizzaService(IUnitOfWork unitOfWork)
+        public PizzaSpecialService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         public void AddPizzaSpecial(PizzaSpecialCreateInfo pizza)
         {
-            var newPizza = new PizzaSpecial(Guid.NewGuid(),pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
+            var newPizza = new PizzaSpecial(Guid.NewGuid(), pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
             _unitOfWork.PizzaSpecials.Add(newPizza);
             _unitOfWork.Complete();
         }

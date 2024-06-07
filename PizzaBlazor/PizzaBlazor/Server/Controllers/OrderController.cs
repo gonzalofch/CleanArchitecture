@@ -7,6 +7,7 @@ using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Order;
 using PizzaBlazor.Shared.DtoModels.Pizza;
 using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
+using System.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,47 +24,6 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
-
-    //    [HttpGet]
-    //    public IActionResult GetOrders()
-    //    {
-    //        var orders = _unitOfWork.Orders.GetAll()
-    //    .Select(_ => new OrderDTO(
-    //        _.OrderId,
-    //        //_.UserId,
-    //        _.CreatedTime,
-    //        new AddressDTO(
-    //            _.DeliveryAddress.Id,
-    //            _.DeliveryAddress.Name,
-    //            _.DeliveryAddress.Line1,
-    //            _.DeliveryAddress.Line2,
-    //            _.DeliveryAddress.City,
-    //            _.DeliveryAddress.Region,
-    //            _.DeliveryAddress.PostalCode
-    //        ),
-    //        _.Pizzas.Select(p => new PizzaDTO(
-    //            p.Id,
-    //            new PizzaSpecialDTO(
-    //                p.Special.Id,
-    //                p.Special.Name,
-    //                p.Special.BasePrice,
-    //                p.Special.Description,
-    //                p.Special.ImageUrl,
-    //                p.Special.FixedSize
-    //            ),
-    //            p.SpecialId,
-    //            p.Size,
-    //            p.Toppings.Select(t => new ToppingDTO(
-    //                    t.Id,
-    //                    t.Name,
-    //                    t.Price
-    //            )).ToList()
-    //        )).ToList()
-    //    )).ToList();
-
-    //        return Ok(orders);
-    //    }
-
     [HttpPost]
     public IActionResult Post(OrderCreateInfo order)
     {
@@ -71,63 +31,66 @@ public class OrderController : ControllerBase
         return Ok(orderId);
     }
 
-    //    [HttpGet("details/{guid}")]
-    //    public OrderDTO GetOrder(Guid guid)
-    //    {
-    //        var order = _unitOfWork.Orders.GetByGuid(guid);
-    //        return new OrderDTO(
-    //        order.OrderId,
-    //        //order.UserId,
-    //        order.CreatedTime,
-    //        new AddressDTO(
-    //            order.DeliveryAddress.Id,
-    //            order.DeliveryAddress.Name,
-    //            order.DeliveryAddress.Line1,
-    //            order.DeliveryAddress.Line2,
-    //            order.DeliveryAddress.City,
-    //            order.DeliveryAddress.Region,
-    //            order.DeliveryAddress.PostalCode
-    //        ),
-    //        order.Pizzas.Select(p => new PizzaDTO(
-    //            p.Id,
-    //            new PizzaSpecialDTO(
-    //                p.Special.Id,
-    //                p.Special.Name,
-    //                p.Special.BasePrice,
-    //                p.Special.Description,
-    //                p.Special.ImageUrl,
-    //                p.Special.FixedSize
-    //            ),
-    //            p.SpecialId,
-    //            p.Size,
-    //            p.Toppings.Select(t => new ToppingDTO(
-    //                    t.Id,
-    //                    t.Name,
-    //                    t.Price
-    //                    )).ToList()
-    //        )).ToList()
-    //    );
-    //    }
-
     [HttpGet("status")]
-    public IActionResult GetOrdersWithStatus()
+    public List<OrderWithStatusDTO> GetOrdersWithStatus()
     {
         var allOrdersWithStatus = _orderService.GetAllOrdersWithStatus();
-        return Ok(allOrdersWithStatus); //queda recibir undto
+        var DtoOrderStatus = allOrdersWithStatus.Select(ows =>
+        {
+            return new OrderWithStatusDTO
+            {
+                Order = new OrderDTO
+                {
+                    OrderId = ows.Order.OrderId,
+                    CreatedTime = ows.Order.CreatedTime,
+                    DeliveryAddress = new AddressDTO(
+                        ows.Order.DeliveryAddress.Id,
+                        ows.Order.DeliveryAddress.Name,
+                        ows.Order.DeliveryAddress.Line1,
+                        ows.Order.DeliveryAddress.Line2,
+                        ows.Order.DeliveryAddress.City,
+                        ows.Order.DeliveryAddress.Region,
+                        ows.Order.DeliveryAddress.PostalCode
+                    ),
+                    Pizzas = ows.Order.Pizzas.Select(pz =>
+                    {
+                        return new PizzaDTO
+                        {
+                            Id = pz.Id,
+                            Size = pz.Size,
+                            Special = new PizzaSpecialDTO(
+                                pz.Special.Id,
+                                pz.Special.Name,
+                                pz.Special.BasePrice,
+                                pz.Special.Description,
+                                pz.Special.ImageUrl,
+                                pz.Special.FixedSize
+                            ),
+                            SpecialId = pz.SpecialId,
+                            Toppings = pz.Toppings.Select(tpp =>
+                            {
+                                return new ToppingDTO
+                                {
+                                    Name = tpp.Name,
+                                    Id = tpp.Id,
+                                    Price = tpp.Price
+                                };
+                            }).ToList()
+                        };
+                    }).ToList()
+                },
+                StatusText = ows.StatusText
+            };
+        }).ToList();
+
+        return DtoOrderStatus;
+
     }
 
     [HttpGet("status/{orderId}")]
-public IActionResult GetOrderWithStatus(Guid orderId)
-{
-    var orderStatus = _orderService.GetOrderWithStatus(orderId);
-    return Ok(orderStatus);
-}
-
-    //    [HttpDelete("{guid}")]
-    //    public void Delete(Guid guid)
-    //    {
-    //        var orderId = _unitOfWork.Orders.Find(_ => _.OrderId == guid).First();
-    //        _unitOfWork.Orders.Remove(orderId);
-    //        _unitOfWork.Complete();
-    //    }
+    public IActionResult GetOrderWithStatus(Guid orderId)
+    {
+        var orderStatus = _orderService.GetOrderWithStatus(orderId);
+        return Ok(orderStatus);
+    }
 }

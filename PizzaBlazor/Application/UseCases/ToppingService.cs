@@ -24,7 +24,7 @@ namespace Application.UseCases
         }
         public List<Topping> GetToppings()
         {
-            var toppings=_unitOfWork.Toppings.GetAll().ToList();
+            var toppings = _unitOfWork.Toppings.GetAll().ToList();
             return toppings;
         }
     }
