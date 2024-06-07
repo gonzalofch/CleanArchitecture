@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PizzaBlazor.Shared.DtoModels;
+namespace PizzaBlazor.Shared.DtoModels.Topping;
 
 public class ToppingDTO
 {

@@ -1,5 +1,6 @@
 ﻿@using PizzaBlazor.Shared.DtoModels.Pizza
 @using PizzaBlazor.Shared.DtoModels;
+@using PizzaBlazor.Shared.DtoModels.Topping
 
 <div class="dialog-container">
     <div class="dialog">
@@ -73,6 +74,7 @@
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public List<ToppingDTO> AvailableToppings { get; set; }
+
     bool supportSizing = true;
 
     void ToppingSelected(ChangeEventArgs e)

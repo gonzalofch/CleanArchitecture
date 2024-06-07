@@ -1,0 +1,34 @@
+﻿@using PizzaBlazor.Shared.DtoModels.Order
+@using PizzaBlazor.Client.Services
+@inject OrderState OrderStateInstance
+
+<div class="sidebar">
+    <div class="order-contents">
+        <h2>Your order</h2>
+
+        @foreach (var configuredPizza in ItemsInCart.Pizzas)
+        {
+            <div class="cart-item">
+                <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
+                <ul>
+                </ul>
+                <div class="item-price">
+                    @configuredPizza.GetFormattedTotalPrice()
+                </div>
+                <a @onclick="@(() => OrderStateInstance.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
+            </div>
+        }
+    </div>
+
+    <div class="order-total @(ItemsInCart.Pizzas.Any() ? "" : "hidden")">
+        Total:
+        <span class="total-price">@ItemsInCart.GetFormattedTotalPrice()</span>
+        <a href="checkout" class="@(ItemsInCart.Pizzas.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
+            Order >
+        </a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public OrderDTO ItemsInCart { get; set; }
+}

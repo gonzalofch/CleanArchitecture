@@ -1,0 +1,20 @@
+﻿@using PizzaBlazor.Shared.DtoModels.PizzaSpecial
+@using PizzaBlazor.Client.Services
+@inject OrderState OrderStateInstance
+
+<li @onclick="OnClick" style="background-image: url('@Special.ImageUrl')">
+    <div class="pizza-info">
+        <span class="title">@Special.Name</span>
+        @Special.Description
+        <span class="price">@Special.GetFormattedBasePrice()</span>
+    </div>
+</li>
+
+@code {
+    [Parameter] public PizzaSpecialDTO Special { get; set; }
+    [Parameter] public EventCallback<PizzaSpecialDTO> OnClickSpecial { get; set; }
+    private async Task OnClick()
+    {
+        await OnClickSpecial.InvokeAsync(Special);
+    }
+}

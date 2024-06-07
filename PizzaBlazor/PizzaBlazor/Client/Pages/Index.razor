@@ -1,20 +1,8 @@
-﻿@using PizzaBlazor.Client;
-@using PizzaBlazor.Client.Components.Modals;
-@using PizzaBlazor.Client.Services;
-@using System.Text;
-@using PizzaBlazor.Shared.DtoModels;
-@using PizzaBlazor.Shared.DtoModels.Order;
-
-@inject HttpClient HttpClient
-@inject NavigationManager NavigationManager
-@inject OrderState OrderStateInstance
-
-
+﻿@page "/"
 @page "/pizzas"
-@page "/"
-@using PizzaBlazor.Shared.DtoModels.Order
-@using PizzaBlazor.Shared.DtoModels.PizzaSpecial
-@*Pruebas de Navigation Manager con lo que devuelven*@
+
+@using PizzaBlazor.Client.Components.Modals
+@using PizzaBlazor.Client.Components.Items
 
 <div class="main">
     <ul class="pizza-cards">
@@ -22,15 +10,8 @@
         {
             @foreach (var special in specials)
             {
-                Console.WriteLine(special);
-
-                <li @onclick="@(() => OrderStateInstance.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
-                    <div class="pizza-info">
-                        <span class="title">@special.Name</span>
-                        @special.Description
-                        <span class="price">@special.GetFormattedBasePrice()</span>
-                    </div>
-                </li>
+                <PizzaSpecialCard Special="special"
+                                  OnClickSpecial="OrderStateInstance.ShowConfigurePizzaDialog" />
             }
 
             @if (OrderStateInstance.ShowingConfigureDialog)
@@ -44,67 +25,4 @@
     </ul>
 </div>
 
-<div class="sidebar">
-    <div class="order-contents">
-        <h2>Your order</h2>
-
-        @foreach (var configuredPizza in OrderStateInstance.Order.Pizzas)
-        {
-            Console.WriteLine("llega");
-            <div class="cart-item">
-                <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
-                <ul>
-                </ul>
-                <div class="item-price">
-                    @configuredPizza.GetFormattedTotalPrice()
-                </div>
-                <a @onclick="@(() => OrderStateInstance.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
-            </div>
-        }
-    </div>
-
-
-    <div class="order-total @(order.Pizzas.Any() ? "" : "hidden")">
-        Total:
-        <span class="total-price">@order.GetFormattedTotalPrice()</span>
-        <a href="checkout" class="@(order.Pizzas.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
-            Order >
-        </a>
-    </div>
-</div>
-
-@*SE PUEDE TRAER UNA PAGINA COMO SI FUERA UN COMPONENTE*@
-
-@* <div style="background:red">
-    <MyOrders></MyOrders>
-</div> *@
-
-@code {
-    List<PizzaSpecialDTO> specials;
-    List<ToppingDTO> selectableToppings;
-    OrderDTO order => OrderStateInstance.Order;
-
-    /*
-    * With NavigationManager we can obtain all these values
-    * The current full URI, such as http://www.blablablazor.com/pizzas/margherita?extratopping=pineapple.
-    *     The base URI, such as http://www.blablablazor.com/.
-    *     The base relative path, such as pizzas/margherita.
-    *     The query string, such as ?extratopping=pineapple.
-    */
-
-    private void Navigate()
-    {
-        NavigationManager.NavigateTo("/another-page");
-    }
-
-    private void NavigateToPaymentPage()
-    {
-        NavigationManager.NavigateTo("buypizza");
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        selectableToppings = await HttpClient.GetFromJsonAsync<List<ToppingDTO>>(NavigationManager.BaseUri + "toppings");
-        specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecialDTO>>(NavigationManager.BaseUri + "pizzaspecials");
-    }
-}
+<OrderSideBar ItemsInCart="order" />
