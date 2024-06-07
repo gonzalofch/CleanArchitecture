@@ -92,13 +92,13 @@ namespace Application.UseCases
                 )).ToList()
             )).ToList());
 
-            return OrderWithStatus.FromOrder(orderDto);
+            return orderDto.GetStatus();
 
         }
         public List<OrderWithStatus> GetAllOrdersWithStatus()
         {
             var orders = _unitOfWork.Orders.GetAll();
-            var ordersWithStatus = orders.Select(orderDto => OrderWithStatus.FromOrder(orderDto)).ToList();
+            var ordersWithStatus = orders.Select(orderDto => orderDto.GetStatus()).ToList();
             return ordersWithStatus;
         }
     }
