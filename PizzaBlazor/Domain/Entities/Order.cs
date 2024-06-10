@@ -1,4 +1,5 @@
 ﻿using Domain.StateEnums;
+using System.Collections.Generic;
 
 namespace Domain.Entities;
 
@@ -28,7 +29,6 @@ public class Order
 
     public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
-
     public string GetStatus()
     {
         string statusText;
@@ -48,5 +48,10 @@ public class Order
         }
 
         return statusText;
+    }
+
+    public void AddPizza( PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
+    {
+        Pizzas.Add(new Pizza(Guid.NewGuid(), special, specialId, size, toppings));
     }
 }

@@ -23,12 +23,20 @@ namespace Application.UseCases
         {
             var availableToppings = _unitOfWork.Toppings.GetAll().ToDictionary(t => t.Id);
             var availablePizzaSpecials = _unitOfWork.PizzaSpecials.GetAll().ToDictionary(ps => ps.Id);
-            //se crea Orden que se insertará
-            //Se mapea orderCreateInfo a este order
-            //Se llenan los datos de Order
-            Order orderEntity = new Order();
-            orderEntity = order.MapToOrderToCreate();
-            orderEntity.FillIOrdernfo(order, availableToppings, availablePizzaSpecials); //queda un poco raro xd
+
+            Order orderEntity = order.MapToOrderToCreate();
+
+            order.Pizzas.ForEach(pizza =>
+                        {
+                            PizzaSpecial pizzaSpecial = availablePizzaSpecials.GetValueOrDefault(pizza.SpecialId) ?? new PizzaSpecial();
+
+                            List<Topping> toppings = pizza.Toppings
+                                        .Where(toppingId => availableToppings.ContainsKey(toppingId))
+                                        .Select(toppingId => availableToppings[toppingId])
+                                        .ToList();
+
+                            orderEntity.AddPizza(pizzaSpecial, pizza.SpecialId, pizza.Size, toppings);
+                        });
             _unitOfWork.Orders.Add(orderEntity);
             _unitOfWork.Complete();
 
@@ -37,15 +45,14 @@ namespace Application.UseCases
 
         public Order GetOrderWithStatus(Guid orderId)
         {
-            var order = _unitOfWork.Orders
-            .Find(o => o.OrderId == orderId).First();
-            return order;
+            return _unitOfWork.Orders
+            .Find(o => o.OrderId == orderId)
+                    .First();
         }
 
         public List<Order> GetAllOrdersWithStatus()
         {
-            var orders = _unitOfWork.Orders.GetAll().ToList();
-            return orders;
+            return _unitOfWork.Orders.GetAll().ToList();
         }
     }
 }
