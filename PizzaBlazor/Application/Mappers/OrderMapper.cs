@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.UseCases.Create;
 using Domain.Entities;
-using Domain.StateEnums;
-using Application.Mappers;
-using Application.UseCases.Create;
 namespace Application.Mappers;
 
 public static class OrderMapper

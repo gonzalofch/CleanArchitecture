@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PizzaBlazor.Shared.DtoModels.Address
 {
@@ -19,6 +14,7 @@ namespace PizzaBlazor.Shared.DtoModels.Address
             Region = region;
             PostalCode = postalCode;
         }
+
         public AddressDTO() { }
         public Guid Id { get; set; }
 

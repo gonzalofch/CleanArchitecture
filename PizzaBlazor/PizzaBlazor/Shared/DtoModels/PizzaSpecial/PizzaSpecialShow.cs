@@ -1,8 +1,8 @@
 ﻿namespace PizzaBlazor.Shared.DtoModels.PizzaSpecial
 {
-    public class PizzaSpecialDTO
+    public class PizzaSpecialShow
     {
-        public PizzaSpecialDTO(Guid id, string name, decimal basePrice, string description, string imageUrl, int? fixedSize)
+        public PizzaSpecialShow(Guid id, string name, decimal basePrice, string description, string imageUrl, int? fixedSize)
         {
             Id = id;
             Name = name;
@@ -11,7 +11,8 @@
             ImageUrl = imageUrl;
             FixedSize = fixedSize;
         }
-        public PizzaSpecialDTO() { }
+
+        public PizzaSpecialShow() { }
 
         public Guid Id { get; set; }
 

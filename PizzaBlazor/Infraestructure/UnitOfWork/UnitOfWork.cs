@@ -23,12 +23,14 @@ public class UnitOfWork : IUnitOfWork
         User = new UserRepository(_context);
     }
 
+    #region Repositories
     public IAddressRepository Adresses { get; private set; }
     public IOrderRepository Orders { get; private set; }
     public IPizzaRepository Pizzas { get; private set; }
     public IPizzaSpecialRepository PizzaSpecials { get; private set; }
     public IToppingRepository Toppings { get; private set; }
     public IUserRepository User { get; private set; }
+    #endregion 
 
     public int Complete()
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PizzaBlazor.Shared.DtoModels.Topping
+﻿namespace PizzaBlazor.Shared.DtoModels.Topping
 {
     public  class ToppingCreateDTO
     {
@@ -12,6 +6,7 @@ namespace PizzaBlazor.Shared.DtoModels.Topping
         {
             Id = id;
         }
+
         public ToppingCreateDTO() { }
 
         public Guid Id { get; set; }

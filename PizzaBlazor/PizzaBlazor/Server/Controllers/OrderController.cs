@@ -1,19 +1,9 @@
 ﻿using Application.UseCases;
 using Application.UseCases.Create;
 using Domain.Entities;
-using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Server.Mappers;
-using PizzaBlazor.Shared.DtoModels;
-using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Order;
-using PizzaBlazor.Shared.DtoModels.Pizza;
-using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
-using PizzaBlazor.Shared.DtoModels.Topping;
-using System.Linq;
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PizzaBlazor.Server.Controllers;
 

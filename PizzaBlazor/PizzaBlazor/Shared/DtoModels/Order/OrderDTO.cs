@@ -1,12 +1,6 @@
 ﻿using Domain.StateEnums;
 using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Pizza;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PizzaBlazor.Shared.DtoModels.Order
 {

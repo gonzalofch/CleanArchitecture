@@ -1,11 +1,5 @@
 ﻿using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
 using PizzaBlazor.Shared.DtoModels.Topping;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PizzaBlazor.Shared.DtoModels.Pizza
 {

@@ -27,7 +27,6 @@ builder.Services.AddDbContext<PizzaStoreContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-
 #region LLamada a los repositorios
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
@@ -48,23 +47,20 @@ builder.Services.AddSwaggerGen(c =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
 }
 else
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-//swagger para pruebas
 app.UseSwagger();
-app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
+app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    options.RoutePrefix = "swagger";  //swagger/index.html  
+    options.RoutePrefix = "swagger";
 });
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();

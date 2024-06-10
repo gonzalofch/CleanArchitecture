@@ -28,7 +28,7 @@ public class Pizza
 
     public int Size { get; set; }
 
-    public virtual List<Topping> Toppings { get; set; }
+    public virtual List<Topping> Toppings { get; set; } = new List<Topping>();
 
     public decimal GetBasePrice() =>
     Special is { FixedSize: not null }

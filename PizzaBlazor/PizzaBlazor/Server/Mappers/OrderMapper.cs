@@ -8,18 +8,17 @@ namespace PizzaBlazor.Server.Mappers
     {
         public static OrderDTO MapToDTO(this Order order)
         {
-            OrderDTO orderDTO = new OrderDTO();
-
-            orderDTO.OrderId = order.OrderId;
-            orderDTO.CreatedTime = order.CreatedTime;
-            orderDTO.DeliveryAddress = order.DeliveryAddress.MapToDTO();
-            orderDTO.Pizzas = order.Pizzas.Select(pizza =>
+            return new OrderDTO()
             {
-                return pizza.MapToDTO();
-            }).ToList();
-            orderDTO.StatusText = order.GetStatus();
-
-            return orderDTO;
+                OrderId = order.OrderId,
+                CreatedTime = order.CreatedTime,
+                DeliveryAddress = order.DeliveryAddress.MapToDTO(),
+                Pizzas = order.Pizzas.Select(pizza =>
+                {
+                    return pizza.MapToDTO();
+                }).ToList(),
+                StatusText = order.GetStatus(),
+            };
         }
 
         public static List<OrderDTO> MapToDTOList(this List<Order> orders)
