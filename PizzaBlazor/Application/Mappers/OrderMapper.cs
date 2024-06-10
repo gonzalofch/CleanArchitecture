@@ -18,7 +18,7 @@ public static class OrderMapper
             OrderId = Guid.NewGuid(),
             CreatedTime = DateTime.Now,
             DeliveryAddress = orderInfo.DeliveryAddress.MapToAddressToCreate(),
-            Pizzas = orderInfo.Pizzas.MapToPizzaListToCreate(),
+            //Pizzas = orderInfo.Pizzas.MapToPizzaListToCreate(),
         };
     }
 }

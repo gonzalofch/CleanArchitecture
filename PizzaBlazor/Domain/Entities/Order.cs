@@ -25,7 +25,7 @@ public class Order
 
     public virtual Address DeliveryAddress { get; set; }
 
-    public virtual List<Pizza> Pizzas { get; set; }
+    public virtual List<Pizza> Pizzas { get; set; } = new List<Pizza>();
 
     public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
@@ -50,8 +50,9 @@ public class Order
         return statusText;
     }
 
-    public void AddPizza( PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
+    public void AddPizza(PizzaSpecial special, int size, List<Topping> toppings)
     {
-        Pizzas.Add(new Pizza(Guid.NewGuid(), special, specialId, size, toppings));
+        var pizza = new Pizza(Guid.NewGuid(), special, size, toppings);
+        Pizzas.Add(pizza);
     }
 }

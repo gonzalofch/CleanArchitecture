@@ -11,11 +11,10 @@ namespace PizzaBlazor.Shared.DtoModels.Pizza
 {
     public class PizzaDTO
     {
-        public PizzaDTO(Guid id, PizzaSpecialDTO special, Guid specialId, int size, List<ToppingDTO> toppings)
+        public PizzaDTO(Guid id, PizzaSpecialDTO special, int size, List<ToppingDTO> toppings)
         {
             Id = id;
             Special = special;
-            SpecialId = specialId;
             Size = size;
             Toppings = toppings;
         }
@@ -27,8 +26,6 @@ namespace PizzaBlazor.Shared.DtoModels.Pizza
         public Guid Id { get; set; }
 
         public PizzaSpecialDTO Special { get; set; }
-
-        public Guid SpecialId { get; set; }
 
         public int Size { get; set; }
 

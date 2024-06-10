@@ -23,7 +23,7 @@ public class OrderState
 
     public void ShowConfigurePizzaDialog(PizzaSpecialDTO special)
     {
-        ConfiguringPizza = new PizzaDTO(Guid.NewGuid(), special, special.Id, PizzaDTO.DefaultSize, new List<ToppingDTO>());
+        ConfiguringPizza = new PizzaDTO(Guid.NewGuid(), special, PizzaDTO.DefaultSize, new List<ToppingDTO>());
 
         ShowingConfigureDialog = true;
     }
@@ -41,7 +41,8 @@ public class OrderState
 
     public void ConfirmConfigurePizzaDialog()
     {
-        PizzaCreateDTO pizzaToCreate = new(ConfiguringPizza.SpecialId, ConfiguringPizza.Size, ConfiguringPizza.Toppings.Select(t => t.Id).ToList());
+        PizzaCreateDTO pizzaToCreate = new(ConfiguringPizza.Special.Id, ConfiguringPizza.Size, ConfiguringPizza.Toppings.Select(t => t.Id).ToList());
+        
         Order.Pizzas.Add(ConfiguringPizza);
         OrderCreation.Pizzas.Add(pizzaToCreate);
         ConfiguringPizza = null;

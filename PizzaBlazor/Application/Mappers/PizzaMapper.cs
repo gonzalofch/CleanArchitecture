@@ -16,7 +16,6 @@ namespace Application.Mappers
             {
                 Id = Guid.NewGuid(),
                 Size = pizzaInfo.Size,
-                SpecialId = pizzaInfo.SpecialId,
                 Toppings = pizzaInfo.Toppings.MapToToppingListToCreate()
             };
         }

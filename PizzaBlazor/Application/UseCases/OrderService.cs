@@ -35,7 +35,7 @@ namespace Application.UseCases
                                         .Select(toppingId => availableToppings[toppingId])
                                         .ToList();
 
-                            orderEntity.AddPizza(pizzaSpecial, pizza.SpecialId, pizza.Size, toppings);
+                            orderEntity.AddPizza(pizzaSpecial, pizza.Size, toppings);
                         });
             _unitOfWork.Orders.Add(orderEntity);
             _unitOfWork.Complete();

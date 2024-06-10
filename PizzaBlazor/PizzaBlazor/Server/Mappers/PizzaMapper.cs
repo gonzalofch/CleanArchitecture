@@ -8,7 +8,7 @@ namespace PizzaBlazor.Server.Mappers
     {
         public static PizzaDTO MapToDTO(this Pizza pizza)
         {
-            return new PizzaDTO(pizza.Id, pizza.Special.MapToDTO(), pizza.SpecialId, pizza.Size, pizza.Toppings.MapToDTOList());
+            return new PizzaDTO(pizza.Id, pizza.Special.MapToDTO(), pizza.Size, pizza.Toppings.MapToDTOList());
         }
 
         public static List<PizzaDTO> MapToDTOList(this List<Pizza> pizzas)

@@ -7,11 +7,10 @@ namespace Domain.Entities;
 /// </summary>
 public class Pizza
 {
-    public Pizza(Guid id, PizzaSpecial special, Guid specialId, int size, List<Topping> toppings)
+    public Pizza(Guid id, PizzaSpecial special, int size, List<Topping> toppings)
     {
         Id = id;
         Special = special;
-        SpecialId = specialId;
         Size = size;
         Toppings = toppings;
     }
@@ -26,8 +25,6 @@ public class Pizza
     public Guid Id { get; set; }
     
     public virtual PizzaSpecial Special { get; set; }
-
-    public Guid SpecialId { get; set; }
 
     public int Size { get; set; }
 
