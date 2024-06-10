@@ -1,4 +1,4 @@
-﻿namespace Application.UseCases
+﻿namespace Application.UseCases.Create
 {
     public class OrderCreateInfo
     {
@@ -11,5 +11,6 @@
         public AddressCreateInfo DeliveryAddress { get; set; }
 
         public List<PizzaCreateInfo> Pizzas { get; set; }
+
     }
 }

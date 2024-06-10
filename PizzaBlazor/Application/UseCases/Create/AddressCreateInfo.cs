@@ -1,14 +1,16 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Domain;
-namespace Domain.Entities;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Address
+namespace Application.UseCases.Create;
+
+public class AddressCreateInfo
 {
-    public Address() { }
-    public Address(Guid id, string name, string line1, string line2, string city, string region,string postalCode)
+    public AddressCreateInfo(string name, string line1, string line2, string city, string region, string postalCode)
     {
-        Id = id;
         Name = name;
         Line1 = line1;
         Line2 = line2;
@@ -16,8 +18,6 @@ public class Address
         Region = region;
         PostalCode = postalCode;
     }
-
-    public Guid Id { get; set; }
 
     [Required, MinLength(3, ErrorMessage = "Please use a Name bigger than 3 letters."), MaxLength(100, ErrorMessage = "Please use a Name less than 100 letters.")]
     public string Name { get; set; }

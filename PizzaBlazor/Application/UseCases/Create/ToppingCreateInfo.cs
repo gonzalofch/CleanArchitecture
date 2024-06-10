@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Application.UseCases
+namespace Application.UseCases.Create
 {
     public class ToppingCreateInfo
     {

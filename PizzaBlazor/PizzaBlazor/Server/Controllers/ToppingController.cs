@@ -18,10 +18,15 @@ namespace PizzaBlazor.Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetToppings()
+        public List<ToppingDTO> GetToppings()
         {
             var toppings =_toppingService.GetToppings();
-            return Ok(toppings);
+            List<ToppingDTO> toppingsDTO = toppings.Select(x =>
+            {
+                return new ToppingDTO(x.Id, x.Name, x.Price);
+            }).ToList();
+
+            return toppingsDTO;
         }
     }
 }

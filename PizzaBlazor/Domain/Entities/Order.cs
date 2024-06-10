@@ -25,6 +25,7 @@ public class Order
     public virtual Address DeliveryAddress { get; set; }
 
     public virtual List<Pizza> Pizzas { get; set; }
+
     public decimal GetTotalPrice() => Pizzas.Sum(p => p.GetTotalPrice());
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
 

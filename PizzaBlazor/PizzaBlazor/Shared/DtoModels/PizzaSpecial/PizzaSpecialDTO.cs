@@ -17,6 +17,7 @@ namespace PizzaBlazor.Shared.DtoModels.PizzaSpecial
             ImageUrl = imageUrl;
             FixedSize = fixedSize;
         }
+        public PizzaSpecialDTO() { }
 
         public Guid Id { get; set; }
 

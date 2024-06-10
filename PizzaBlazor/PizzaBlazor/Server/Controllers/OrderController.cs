@@ -1,7 +1,9 @@
 ﻿using Application.UseCases;
+using Application.UseCases.Create;
 using Domain.Entities;
 using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
+using PizzaBlazor.Server.Mappers;
 using PizzaBlazor.Shared.DtoModels;
 using PizzaBlazor.Shared.DtoModels.Address;
 using PizzaBlazor.Shared.DtoModels.Order;
@@ -35,90 +37,14 @@ public class OrderController : ControllerBase
     [HttpGet("status")]
     public List<OrderDTO> GetOrdersWithStatus()
     {
-        var allOrdersWithStatus = _orderService.GetAllOrdersWithStatus();
-        var DtoOrderStatus = allOrdersWithStatus.Select(ows =>
-        {
-
-            return new OrderDTO
-            {
-                OrderId = ows.OrderId,
-                CreatedTime = ows.CreatedTime,
-                DeliveryAddress = new AddressDTO(
-                    ows.DeliveryAddress.Id,
-                    ows.DeliveryAddress.Name,
-                    ows.DeliveryAddress.Line1,
-                    ows.DeliveryAddress.Line2,
-                    ows.DeliveryAddress.City,
-                    ows.DeliveryAddress.Region,
-                    ows.DeliveryAddress.PostalCode
-                ),
-                Pizzas = ows.Pizzas.Select(pz =>
-                {
-                    return new PizzaDTO
-                    {
-                        Id = pz.Id,
-                        Size = pz.Size,
-                        Special = new PizzaSpecialDTO(
-                            pz.Special.Id,
-                            pz.Special.Name,
-                            pz.Special.BasePrice,
-                            pz.Special.Description,
-                            pz.Special.ImageUrl,
-                            pz.Special.FixedSize
-                        ),
-                        SpecialId = pz.SpecialId,
-                        Toppings = pz.Toppings.Select(tpp =>
-                        {
-                            return new ToppingDTO
-                            {
-                                Name = tpp.Name,
-                                Id = tpp.Id,
-                                Price = tpp.Price
-                            };
-                        }).ToList()
-                    };
-                }).ToList(),
-                StatusText = ows.GetStatus()
-            };
-        }).ToList();
-
-        return DtoOrderStatus;
+        List<Order> allOrdersWithStatus = _orderService.GetAllOrdersWithStatus();
+        return allOrdersWithStatus.MapToDTOList();
     }
 
     [HttpGet("status/{orderId}")]
     public OrderDTO GetOrderWithStatus(Guid orderId)
     {
-        var orderStatus = _orderService.GetOrderWithStatus(orderId);
-        var DtoOrderStatus = new OrderDTO
-        {
-            CreatedTime = orderStatus.CreatedTime,
-            DeliveryAddress = new AddressDTO
-            {
-                Name = orderStatus.DeliveryAddress.Name,
-                Id = orderStatus.DeliveryAddress.Id,
-                City = orderStatus.DeliveryAddress.City,
-                Region = orderStatus.DeliveryAddress.Region,
-                Line1 = orderStatus.DeliveryAddress.Line1,
-                Line2 = orderStatus.DeliveryAddress.Line2,
-                PostalCode = orderStatus.DeliveryAddress.PostalCode,
-            },
-            OrderId = orderId,
-            Pizzas = orderStatus.Pizzas.Select(pzz =>
-            {
-                return new PizzaDTO(pzz.Id,
-                    new PizzaSpecialDTO(pzz.Special.Id, pzz.Special.Name, pzz.Special.BasePrice,
-                    pzz.Special.Description,
-                    pzz.Special.ImageUrl,
-                    pzz.Special.FixedSize),
-                    pzz.Id, pzz.Size,
-                    pzz.Toppings.Select(tpp =>
-                    {
-                        return new ToppingDTO(tpp.Id, tpp.Name, tpp.Price);
-                    }).ToList());
-            }).ToList(),
-            StatusText = orderStatus.GetStatus()
-        };
-
-        return DtoOrderStatus;
+        Order orderStatus = _orderService.GetOrderWithStatus(orderId);
+        return orderStatus.MapToDTO();
     }
 }

@@ -4,7 +4,9 @@ using Domain.UnitOfWork;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBlazor.Shared.DtoModels.PizzaSpecial;
+using PizzaBlazor.Server.Mappers;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Application.UseCases.Create;
 namespace PizzaBlazor.Server.Controllers;
 
 [Route("pizzaspecials")]
@@ -19,10 +21,10 @@ public class PizzaSpecialController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetSpecials()
+    public List<PizzaSpecialDTO> GetSpecials()
     {
-        var specials = _pizzaService.GetPizzaSpecials();
-        return Ok(specials);
+        List<PizzaSpecial> specials = _pizzaService.GetPizzaSpecials();
+        return specials.MapToDTOList();
     }
 
     [HttpPost]
