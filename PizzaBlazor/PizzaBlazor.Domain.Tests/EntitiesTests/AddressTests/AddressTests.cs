@@ -47,6 +47,7 @@ namespace PizzaBlazor.Domain.Tests.EntitiesTests.AddressTests
         [InlineData("John Doe", "123 Main St", "New York", "N", "10001", "Please use a Region bigger than 3 letters.")]
         [InlineData("John Doe", "123 Main St", "New York", "NYRegion", "1000", "Please use a valid Postal Code with five numbers.")]
         [InlineData("John Doe", "123 Main St", "New York", "NYRegion", "100001", "Please use a valid Postal Code with five numbers.")]
+        //falta para la linea2, pero en la entidad no tengo validacion aparte de que tenga menos de 100 caracteres
         public void Validate_Should_Fail_With_Error_Message_If_Any_Property_Is_Invalid(
        string name, string line1, string city, string region, string postalCode, string errorMessage)
         {
