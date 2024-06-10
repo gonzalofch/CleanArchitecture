@@ -36,4 +36,20 @@ public class Address
 
     [Required, RegularExpression(@"^([0-9]{5})$", ErrorMessage = "Please use a valid Postal Code with five numbers.")]
     public string PostalCode { get; set; }
+
+    public void Validate()
+    {
+        var validationContext = new ValidationContext(this);
+        var validationResults = new List<ValidationResult>();
+
+        if (!Validator.TryValidateObject(this, validationContext, validationResults, true))
+        {
+            var errorMessages = new List<string>();
+            foreach (var validationResult in validationResults)
+            {
+                errorMessages.Add(validationResult.ErrorMessage);
+            }
+            throw new ValidationException(string.Join("\n", errorMessages));
+        }
+    }
 }

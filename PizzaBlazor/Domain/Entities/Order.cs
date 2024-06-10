@@ -1,5 +1,6 @@
 ﻿using Domain.StateEnums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
@@ -32,13 +33,13 @@ public class Order
     public string GetStatus()
     {
         string statusText;
-        var dispatchTime = DateTime.Now.Add(PreparationDuration);
+        var dispatchTime = CreatedTime.Add(PreparationDuration);
 
-        if (DateTime.Now < dispatchTime)
+        if (CreatedTime < dispatchTime)
         {
             statusText = DispatchTimeState.Preparing.Message;
         }
-        else if (DateTime.Now < dispatchTime + DeliveryDuration)
+        else if (CreatedTime < dispatchTime + DeliveryDuration)
         {
             statusText = DispatchTimeState.OutForDelivery.Message;
         }
@@ -54,5 +55,17 @@ public class Order
     {
         var pizza = new Pizza(Guid.NewGuid(), special, size, toppings);
         Pizzas.Add(pizza);
+    }
+    public void Validate()
+    {
+        if (DeliveryAddress == null)
+        {
+            throw new ValidationException("Delivery address is required.");
+        }
+
+        if (Pizzas == null || !Pizzas.Any())
+        {
+            throw new ValidationException("At least one pizza is required.");
+        }
     }
 }
