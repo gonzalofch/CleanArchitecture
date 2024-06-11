@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -35,35 +36,14 @@ namespace PizzaBlazor.Domain.Tests.EntitiesTests.AddressTests
             deliveryAddress.PostalCode.Should().Be(postalCode);
         }
 
-        [Theory]
-        [InlineData(null, "123 Main St", "New York", "NYRegion", "10001", "The Name field is required.")]
-        [InlineData("John Doe", null, "New York", "NYRegion", "10001", "The Line1 field is required.")]
-        [InlineData("John Doe", "123 Main St", null, "NYRegion", "10001", "The City field is required.")]
-        [InlineData("John Doe", "123 Main St", "New York", null, "10001", "The Region field is required.")]
-        [InlineData("John Doe", "123 Main St", "New York", "NYRegion", null, "The PostalCode field is required.")]
-        [InlineData("Jo", "123 Main St", "New York", "NYRegion", "10001", "Please use a Name bigger than 3 letters.")]
-        [InlineData("John Doe", "123", "New York", "NYRegion", "10001", "Please use an Address bigger than 5 letters.")]
-        [InlineData("John Doe", "123 Main St", "Ne", "NYRegion", "10001", "Please use a City bigger than 3 letters.")]
-        [InlineData("John Doe", "123 Main St", "New York", "N", "10001", "Please use a Region bigger than 3 letters.")]
-        [InlineData("John Doe", "123 Main St", "New York", "NYRegion", "1000", "Please use a valid Postal Code with five numbers.")]
-        [InlineData("John Doe", "123 Main St", "New York", "NYRegion", "100001", "Please use a valid Postal Code with five numbers.")]
+        [Theory ]
+        [ClassData(typeof(AddressFieldsTests))]
         //falta para la linea2, pero en la entidad no tengo validacion aparte de que tenga menos de 100 caracteres
-        public void Validate_Should_Fail_With_Error_Message_If_Any_Property_Is_Invalid(
-       string name, string line1, string city, string region, string postalCode, string errorMessage)
+        public void Validate_Should_Fail_With_Error_Message_If_Any_Property_Is_Invalid(Address addressInstance, string errorMessage)
         {
-            var address = new Address
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Line1 = line1,
-                City = city,
-                Region = region,
-                PostalCode = postalCode 
-            };
+            var errorMessages = () => addressInstance.Validate();
 
-            Action act = () => address.Validate();
-
-            act.Should().Throw<ValidationException>().
+            errorMessages.Should().Throw<ValidationException>().
                 And.Message
                 .Should().Be(errorMessage);
         }

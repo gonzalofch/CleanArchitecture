@@ -6,7 +6,7 @@ namespace Domain.Entities;
 public class Address
 {
     public Address() { }
-    public Address(Guid id, string name, string line1, string line2, string city, string region,string postalCode)
+    public Address(Guid id, string name, string line1, string line2, string city, string region, string postalCode)
     {
         Id = id;
         Name = name;

@@ -40,26 +40,6 @@ public class OrderTests
     }
 
     [Fact]
-    public void Should_Throw_Exception_If_Order_Is_Not_Valid()
-    {
-
-        var id = Guid.NewGuid();
-        var createdTime = DateTime.Now;
-        var deliveryAddress = new Address(Guid.NewGuid(), "John Doe", "123 Main St", "Apt 4B", "New York", "NY", "12345");
-        var pizzas = new List<Pizza> {
-            new Pizza(Guid.NewGuid(),
-            new PizzaSpecial(Guid.NewGuid(),
-                            "Margherita",
-                            10.0m,
-                            "Classic pizza",
-                            "imageUrl",
-                            null),
-            12,
-            new List<Topping>())
-        };
-    }
-
-    [Fact]
     public void GetTotalPrice_Should_Return_Correct_Total_Price()
     {
         var pizzas = new List<Pizza>
@@ -92,7 +72,7 @@ public class OrderTests
     [Fact]
     public void GetStatus_Should_Return_Preparing_If_CreatedTime_Is_Less_Than_DispatchTime()
     {
-        var createdTime = DateTime.Now;
+        var createdTime = DateTime.Now.AddMinutes(-10);
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
 
         var status = order.GetStatus();
@@ -103,9 +83,9 @@ public class OrderTests
     [Fact]
     public void GetStatus_Should_Return_OutForDelivery_If_CreatedTime_Is_Less_Than_DeliveryTime()
     {
-        var createdTime = DateTime.Now.Subtract(Order.PreparationDuration).AddSeconds(5);
+        var createdTime = DateTime.Now;
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
-
+        order.CreatedTime = createdTime.AddMinutes(12);
         var status = order.GetStatus();
 
         status.Should().Be(DispatchTimeState.OutForDelivery.Message);
@@ -114,9 +94,9 @@ public class OrderTests
     [Fact]
     public void GetStatus_Should_Return_Delivered_If_CreatedTime_Is_Greater_Than_DeliveryTime()
     {
-        var createdTime = DateTime.Now.Subtract(Order.PreparationDuration).Subtract(Order.DeliveryDuration).Subtract(TimeSpan.FromSeconds(5));
+        var createdTime = DateTime.Now;
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
-
+        order.CreatedTime = createdTime.AddSeconds(30);
         var status = order.GetStatus();
 
         status.Should().Be(DispatchTimeState.Delivered.Message);
@@ -138,51 +118,53 @@ public class OrderTests
         pizza.Size.Should().Be(size);
         pizza.Toppings.Should().BeEquivalentTo(toppings);
     }
+
+    [Fact]
+    public void Should_Throw_Exception_If_Order_Has_No_Pizzas()
+    {
+        var id = Guid.NewGuid();
+        var createdTime = DateTime.Now;
+        var deliveryAddress = new Address()
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe",
+            Line1 = "Main St",
+            Line2 = "Apt 4B",
+            City = "New York",
+            Region = "New York Region",
+            PostalCode = "12345",
+        };
+
+        List<Pizza> pizzas = null;
+
+        //Order order = new Order()
+        //{
+        //    OrderId = id,
+        //    CreatedTime = createdTime,
+        //    DeliveryAddress = deliveryAddress,
+        //    Pizzas = pizzas
+        //};
+
+        FluentActions
+            .Invoking(() => new Order(id, createdTime, deliveryAddress, pizzas))
+            .Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null. (Parameter 'pizzas')");
+    }
+
+    [Fact]
     public void Should_Throw_Exception_If_Order_Is_Not_Valid_No_DeliveryAddress()
     {
-        var order = new Order
-        {
-            CreatedTime = DateTime.Now,
-            Pizzas = new List<Pizza>
+        var orderId = Guid.NewGuid();
+        var createdTime = DateTime.Now;
+        Address deliveryAddress = null;
+        var pizzas = new List<Pizza>
             {
                 new Pizza(Guid.NewGuid(), new PizzaSpecial(Guid.NewGuid(), "Margherita", 10.0m, "Classic pizza", "imageUrl", null), 12, new List<Topping>())
-            }
-        };
-
-        Action act = () => order.Validate();
-
-        act.Should().Throw<ValidationException>().WithMessage("Delivery address is required.");
-    }
-
-    [Fact]
-    public void Should_Throw_Exception_If_Order_Is_Not_Valid_No_Pizzas()
-    {
-        var order = new Order
-        {
-            CreatedTime = DateTime.Now,
-            DeliveryAddress = new Address(Guid.NewGuid(), "John Doe", "123 Main St", "Apt 4B", "New York", "NY", "12345")
-        };
-
-        Action act = () => order.Validate();
-
-        act.Should().Throw<ValidationException>().WithMessage("At least one pizza is required.");
-    }
-
-    [Fact]
-    public void Should_Not_Throw_Exception_If_Order_Is_Valid()
-    {
-        var order = new Order
-        {
-            CreatedTime = DateTime.Now,
-            DeliveryAddress = new Address(Guid.NewGuid(), "John Doe", "123 Main St", "Apt 4B", "New York", "NY", "12345"),
-            Pizzas = new List<Pizza>
-            {
-                new Pizza(Guid.NewGuid(), new PizzaSpecial(Guid.NewGuid(), "Margherita", 10.0m, "Classic pizza", "imageUrl", null), 12, new List<Topping>())
-            }
-        };
-
-        Action act = () => order.Validate();
-
-        act.Should().NotThrow<ValidationException>();
+            };
+        
+        FluentActions
+            .Invoking(() => new Order(orderId,createdTime,deliveryAddress,pizzas))
+            .Should().Throw<Exception>()
+            .WithMessage("The DeliveryAddress cannot be null.");
     }
 }

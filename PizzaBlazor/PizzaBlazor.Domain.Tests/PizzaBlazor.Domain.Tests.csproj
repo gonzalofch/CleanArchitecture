@@ -24,12 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EntitiesTests\PizzaSpecialTests\" />
-    <Folder Include="EntitiesTests\ToppingTests\" />
-    <Folder Include="EntitiesTests\PizzaTests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 

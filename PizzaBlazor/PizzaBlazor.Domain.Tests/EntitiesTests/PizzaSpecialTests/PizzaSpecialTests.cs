@@ -29,6 +29,5 @@ namespace PizzaBlazor.Domain.Tests.EntitiesTests.PizzaSpecialTests
             pizzaSpecial.BasePrice.Should().Be(basePrice);
             //terminar esta validacion
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.StateEnums;
+﻿using Ardalis.GuardClauses;
+using Domain.StateEnums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,17 +8,18 @@ namespace Domain.Entities;
 
 public class Order
 {
-    public readonly static TimeSpan PreparationDuration = TimeSpan.FromSeconds(10);
-    public readonly static TimeSpan DeliveryDuration = TimeSpan.FromMinutes(1);
+    public readonly static TimeSpan PreparationDuration = TimeSpan.FromMinutes(10);
+    public readonly static TimeSpan DeliveryDuration = TimeSpan.FromMinutes(5);
 
     public Order() { }
 
-    public Order(Guid orderId, /*Guid userId,*/ DateTime createdTime, Address deliveryAddress, List<Pizza> pizzas)
+    public Order(Guid orderId, DateTime createdTime, Address deliveryAddress, List<Pizza> pizzas)
     {
         OrderId = orderId;
         CreatedTime = createdTime;
         DeliveryAddress = deliveryAddress;
-        Pizzas = pizzas;
+        Pizzas = Guard.Against.Null(pizzas);
+        Validate();
     }
 
     public Guid OrderId { get; set; }
@@ -32,18 +34,21 @@ public class Order
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
     public string GetStatus()
     {
-        string statusText;
+        string statusText = string.Empty;
         var dispatchTime = CreatedTime.Add(PreparationDuration);
+
+
+        if (CreatedTime > dispatchTime && CreatedTime < dispatchTime + DeliveryDuration)
+        {
+            statusText = DispatchTimeState.OutForDelivery.Message;
+        }
 
         if (CreatedTime < dispatchTime)
         {
             statusText = DispatchTimeState.Preparing.Message;
         }
-        else if (CreatedTime < dispatchTime + DeliveryDuration)
-        {
-            statusText = DispatchTimeState.OutForDelivery.Message;
-        }
-        else
+
+        if (CreatedTime > (dispatchTime + DeliveryDuration))
         {
             statusText = DispatchTimeState.Delivered.Message;
         }
@@ -60,12 +65,9 @@ public class Order
     {
         if (DeliveryAddress == null)
         {
-            throw new ValidationException("Delivery address is required.");
-        }
-
-        if (Pizzas == null || !Pizzas.Any())
-        {
-            throw new ValidationException("At least one pizza is required.");
+            throw new ArgumentException("The DeliveryAddress cannot be null.");
         }
     }
+
+
 }

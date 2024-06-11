@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using Ardalis.GuardClauses;
 namespace Domain.Entities;
 
 public class Topping
@@ -7,8 +7,8 @@ public class Topping
     public Topping(Guid id, string name, decimal price)
     {
         Id = id;
-        Name = name;
-        Price = price;
+        Name = Guard.Against.NullOrEmpty(name);
+        Price = Guard.Against.NegativeOrZero(price);
     }
 
     public Topping() { }

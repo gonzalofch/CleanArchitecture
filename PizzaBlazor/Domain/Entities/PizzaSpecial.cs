@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Ardalis.GuardClauses;
+
+namespace Domain.Entities;
 
 /// <summary>
 /// Represents a pre-configured template for a pizza a user can order
@@ -8,8 +10,8 @@ public class PizzaSpecial
     public PizzaSpecial(Guid id, string name, decimal basePrice, string description, string imageUrl, int? fixedSize)
     {
         Id = id;
-        Name = name;
-        BasePrice = basePrice;
+        Name = Guard.Against.NullOrEmpty(name);
+        BasePrice = Guard.Against.NegativeOrZero(basePrice);
         Description = description;
         ImageUrl = imageUrl;
         FixedSize = fixedSize;

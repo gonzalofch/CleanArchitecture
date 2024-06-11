@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Ardalis.GuardClauses;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
@@ -10,9 +11,9 @@ public class Pizza
     public Pizza(Guid id, PizzaSpecial special, int size, List<Topping> toppings)
     {
         Id = id;
-        Special = special;
+        Special = Guard.Against.Null(special);
         Size = size;
-        Toppings = toppings;
+        Toppings = Guard.Against.Null(toppings);
     }
     public Pizza()
     {
