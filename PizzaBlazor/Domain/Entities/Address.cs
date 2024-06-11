@@ -45,10 +45,9 @@ public class Address
         if (!Validator.TryValidateObject(this, validationContext, validationResults, true))
         {
             var errorMessages = new List<string>();
-            foreach (var validationResult in validationResults)
-            {
-                errorMessages.Add(validationResult.ErrorMessage);
-            }
+
+            errorMessages.AddRange(validationResults.Select(vr => vr.ErrorMessage));
+
             throw new ValidationException(string.Join("\n", errorMessages));
         }
     }

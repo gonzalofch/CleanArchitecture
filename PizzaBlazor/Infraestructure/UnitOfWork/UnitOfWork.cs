@@ -20,7 +20,6 @@ public class UnitOfWork : IUnitOfWork
         Pizzas = new PizzaRepository(_context);
         PizzaSpecials = new PizzaSpecialRepository(_context);
         Toppings = new ToppingRepository(_context);
-        User = new UserRepository(_context);
     }
 
     #region Repositories
@@ -29,7 +28,6 @@ public class UnitOfWork : IUnitOfWork
     public IPizzaRepository Pizzas { get; private set; }
     public IPizzaSpecialRepository PizzaSpecials { get; private set; }
     public IToppingRepository Toppings { get; private set; }
-    public IUserRepository User { get; private set; }
     #endregion 
 
     public int Complete()

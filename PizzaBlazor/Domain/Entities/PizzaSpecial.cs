@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using System.Text.RegularExpressions;
 
 namespace Domain.Entities;
 
@@ -17,9 +18,9 @@ public class PizzaSpecial
         FixedSize = fixedSize;
     }
 
-    static PizzaSpecial OneSize(Guid id, string name, decimal basePrice, string description, string imageUrl)
+    public static PizzaSpecial DinamicSize(Guid id, string name, decimal basePrice, string description, string imageUrl)
     {
-        return new PizzaSpecial(id, name, basePrice, description, imageUrl,null);
+        return new PizzaSpecial(id, name, basePrice, description, imageUrl, null);
     }
 
     public PizzaSpecial() { }
@@ -30,11 +31,27 @@ public class PizzaSpecial
 
     public decimal BasePrice { get; set; }
 
-    public string Description { get; set; } = string.Empty; 
+    public string Description { get; set; } = string.Empty;
 
     public string ImageUrl { get; set; } = string.Empty;
 
-    public  int? FixedSize { get; set; }
+    public int? FixedSize { get; set; }
 
     public string GetFormattedBasePrice() => BasePrice.ToString("0.00");
+
+    public void Validate()
+    {
+        IsValidImgUrl();
+    }
+    public void IsValidImgUrl()
+    {
+        // Expresión regular para validar el formato
+        string pattern = @"^img/pizzas/[a-zA-Z0-9]+\.(jpg)$";
+
+        // Validar el formato utilizando Regex.IsMatch
+        if (!Regex.IsMatch(ImageUrl, pattern))
+        {
+            throw new ArgumentException("The image url is not correct");
+        }
+    }
 }

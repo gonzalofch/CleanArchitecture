@@ -24,26 +24,27 @@ public class Pizza
     public const int MaximumSize = 17;
 
     public Guid Id { get; set; }
-    
+
     public virtual PizzaSpecial Special { get; set; }
 
     public int Size { get; set; }
 
     public virtual List<Topping> Toppings { get; set; } = new List<Topping>();
 
-    public decimal GetBasePrice() =>
-    Special is { FixedSize: not null }
-        ? Special.BasePrice
-        : (decimal)Size / DefaultSize * Special?.BasePrice ?? 1;
+
+    public decimal GetBasePrice()
+    {
+        if (Special.FixedSize is not null)
+        {
+            return Special.BasePrice;
+        }
+
+        return Math.Round((decimal)Size / DefaultSize * Special?.BasePrice ?? 1, 2);
+    }
 
     public decimal GetTotalPrice()
     {
-        var toppingsPrice = 0.0m;
-
-        foreach (var topping in Toppings)
-        {
-            toppingsPrice+= topping.Price;
-        }
+        var toppingsPrice = Toppings.Sum(topping => topping.Price);
 
         return GetBasePrice() + toppingsPrice;
     }

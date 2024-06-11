@@ -34,7 +34,6 @@ builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
 builder.Services.AddTransient<IToppingRepository, ToppingRepository>();
 builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 builder.Services.AddTransient<IPizzaSpecialRepository, PizzaSpecialRepository>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
 #endregion
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();

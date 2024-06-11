@@ -9,8 +9,6 @@ public interface IUnitOfWork : IDisposable
     IPizzaRepository Pizzas { get; }
     IPizzaSpecialRepository PizzaSpecials{ get; }
     IToppingRepository Toppings { get; }
-    IUserRepository User { get; }
-
     int Complete();
 
     public void Dispose();

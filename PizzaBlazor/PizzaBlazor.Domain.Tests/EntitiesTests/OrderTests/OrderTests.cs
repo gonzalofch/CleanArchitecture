@@ -70,9 +70,9 @@ public class OrderTests
     }
 
     [Fact]
-    public void GetStatus_Should_Return_Preparing_If_CreatedTime_Is_Less_Than_DispatchTime()
+    public void GetStatus_Should_Return_Preparing_If_Now_Is_Before_DispatchTime()
     {
-        var createdTime = DateTime.Now.AddMinutes(-10);
+        var createdTime = DateTime.Now;
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
 
         var status = order.GetStatus();
@@ -81,28 +81,28 @@ public class OrderTests
     }
 
     [Fact]
-    public void GetStatus_Should_Return_OutForDelivery_If_CreatedTime_Is_Less_Than_DeliveryTime()
+    public void GetStatus_Should_Return_OutForDelivery_If_Now_Is_Between_DispatchTime_And_DeliveryTime()
     {
-        var createdTime = DateTime.Now;
+        var createdTime = DateTime.Now.AddMinutes(-11); 
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
-        order.CreatedTime = createdTime.AddMinutes(12);
+
         var status = order.GetStatus();
 
         status.Should().Be(DispatchTimeState.OutForDelivery.Message);
     }
 
     [Fact]
-    public void GetStatus_Should_Return_Delivered_If_CreatedTime_Is_Greater_Than_DeliveryTime()
+    public void GetStatus_Should_Return_Delivered_If_Now_Is_After_DeliveryTime()
     {
-        var createdTime = DateTime.Now;
+        var createdTime = DateTime.Now.AddMinutes(-16); 
         var order = new Order(Guid.NewGuid(), createdTime, new Address(), new List<Pizza>());
-        order.CreatedTime = createdTime.AddSeconds(30);
+
         var status = order.GetStatus();
 
         status.Should().Be(DispatchTimeState.Delivered.Message);
     }
 
-    [Fact]
+[Fact]
     public void AddPizza_Should_Add_Pizza_To_Order()
     {
         var order = new Order(Guid.NewGuid(), DateTime.Now, new Address(), new List<Pizza>());
@@ -135,18 +135,8 @@ public class OrderTests
             PostalCode = "12345",
         };
 
-        List<Pizza> pizzas = null;
-
-        //Order order = new Order()
-        //{
-        //    OrderId = id,
-        //    CreatedTime = createdTime,
-        //    DeliveryAddress = deliveryAddress,
-        //    Pizzas = pizzas
-        //};
-
         FluentActions
-            .Invoking(() => new Order(id, createdTime, deliveryAddress, pizzas))
+            .Invoking(() => new Order(id, createdTime, deliveryAddress, null))
             .Should().Throw<ArgumentException>()
             .WithMessage("Value cannot be null. (Parameter 'pizzas')");
     }
@@ -156,14 +146,13 @@ public class OrderTests
     {
         var orderId = Guid.NewGuid();
         var createdTime = DateTime.Now;
-        Address deliveryAddress = null;
         var pizzas = new List<Pizza>
             {
                 new Pizza(Guid.NewGuid(), new PizzaSpecial(Guid.NewGuid(), "Margherita", 10.0m, "Classic pizza", "imageUrl", null), 12, new List<Topping>())
             };
         
         FluentActions
-            .Invoking(() => new Order(orderId,createdTime,deliveryAddress,pizzas))
+            .Invoking(() => new Order(orderId,createdTime, null, pizzas))
             .Should().Throw<Exception>()
             .WithMessage("The DeliveryAddress cannot be null.");
     }

@@ -17,9 +17,8 @@ public class Order
     {
         OrderId = orderId;
         CreatedTime = createdTime;
-        DeliveryAddress = deliveryAddress;
+        DeliveryAddress = Guard.Against.Null(deliveryAddress);
         Pizzas = Guard.Against.Null(pizzas);
-        Validate();
     }
 
     public Guid OrderId { get; set; }
@@ -34,26 +33,39 @@ public class Order
     public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
     public string GetStatus()
     {
-        string statusText = string.Empty;
+        if (IsPreparing())
+        {
+            return DispatchTimeState.Preparing.Message;
+        }
+        else if (IsReady())
+        {
+            return DispatchTimeState.OutForDelivery.Message;
+        }
+        else
+        {
+            return DispatchTimeState.Delivered.Message;
+        }
+    }
+
+    private static DateTime GetDeliveryTime()
+    {
+        return GetDeliveryTime().Add(DeliveryDuration);
+    }
+
+    public DateTime GetDispatchTime()
+    {
         var dispatchTime = CreatedTime.Add(PreparationDuration);
+        return dispatchTime;
+    }
 
+    public bool IsPreparing()
+    {
+        return DateTime.Now < GetDispatchTime();
+    }
 
-        if (CreatedTime > dispatchTime && CreatedTime < dispatchTime + DeliveryDuration)
-        {
-            statusText = DispatchTimeState.OutForDelivery.Message;
-        }
-
-        if (CreatedTime < dispatchTime)
-        {
-            statusText = DispatchTimeState.Preparing.Message;
-        }
-
-        if (CreatedTime > (dispatchTime + DeliveryDuration))
-        {
-            statusText = DispatchTimeState.Delivered.Message;
-        }
-
-        return statusText;
+    private static bool IsReady()
+    {
+        return DateTime.Now < GetDeliveryTime();
     }
 
     public void AddPizza(PizzaSpecial special, int size, List<Topping> toppings)
@@ -61,13 +73,4 @@ public class Order
         var pizza = new Pizza(Guid.NewGuid(), special, size, toppings);
         Pizzas.Add(pizza);
     }
-    public void Validate()
-    {
-        if (DeliveryAddress == null)
-        {
-            throw new ArgumentException("The DeliveryAddress cannot be null.");
-        }
-    }
-
-
 }
