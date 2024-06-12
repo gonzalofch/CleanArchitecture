@@ -13,7 +13,8 @@ namespace Application.UseCases
 
         public void AddPizzaSpecial(PizzaSpecialCreateInfo pizza)
         {
-            var newPizza = new PizzaSpecial(Guid.NewGuid(), pizza.Name, pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
+            var newPizza = new PizzaSpecial(Guid.NewGuid(), pizza.Name,
+                pizza.BasePrice, pizza.Description, pizza.ImageUrl, pizza.FixedSize);
             _unitOfWork.PizzaSpecials.Add(newPizza);
             _unitOfWork.Complete();
         }

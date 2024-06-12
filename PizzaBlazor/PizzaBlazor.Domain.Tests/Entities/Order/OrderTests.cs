@@ -154,6 +154,6 @@ public class OrderTests
         FluentActions
             .Invoking(() => new Order(orderId,createdTime, null, pizzas))
             .Should().Throw<Exception>()
-            .WithMessage("The DeliveryAddress cannot be null.");
+            .WithMessage("Value cannot be null. (Parameter 'deliveryAddress')");
     }
 }

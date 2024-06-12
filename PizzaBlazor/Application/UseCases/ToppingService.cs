@@ -18,6 +18,7 @@ namespace Application.UseCases
             _unitOfWork.Toppings.Add(newTopping);
             _unitOfWork.Complete();
         }
+
         public List<Topping> GetToppings()
         {
             var toppings = _unitOfWork.Toppings.GetAll().ToList();

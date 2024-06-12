@@ -47,9 +47,9 @@ public class Order
         }
     }
 
-    private static DateTime GetDeliveryTime()
+    private  DateTime GetDeliveryTime()
     {
-        return GetDeliveryTime().Add(DeliveryDuration);
+        return GetDispatchTime().Add(DeliveryDuration);
     }
 
     public DateTime GetDispatchTime()
@@ -63,7 +63,7 @@ public class Order
         return DateTime.Now < GetDispatchTime();
     }
 
-    private static bool IsReady()
+    private bool IsReady()
     {
         return DateTime.Now < GetDeliveryTime();
     }

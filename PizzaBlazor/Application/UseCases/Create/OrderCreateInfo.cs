@@ -8,6 +8,8 @@
             Pizzas = pizzas;
         }
 
+        public OrderCreateInfo() { }
+
         public AddressCreateInfo DeliveryAddress { get; set; }
 
         public List<PizzaCreateInfo> Pizzas { get; set; }

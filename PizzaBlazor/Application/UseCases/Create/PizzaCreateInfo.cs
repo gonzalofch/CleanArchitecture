@@ -8,7 +8,7 @@
             Size = size;
             Toppings = toppings;
         }
-
+        public PizzaCreateInfo() { }
         public Guid SpecialId { get; set; }
 
         public int Size { get; set; }

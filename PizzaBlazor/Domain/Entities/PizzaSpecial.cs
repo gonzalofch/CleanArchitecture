@@ -43,12 +43,11 @@ public class PizzaSpecial
     {
         IsValidImgUrl();
     }
+
     public void IsValidImgUrl()
     {
-        // Expresión regular para validar el formato
         string pattern = @"^img/pizzas/[a-zA-Z0-9]+\.(jpg)$";
 
-        // Validar el formato utilizando Regex.IsMatch
         if (!Regex.IsMatch(ImageUrl, pattern))
         {
             throw new ArgumentException("The image url is not correct");
